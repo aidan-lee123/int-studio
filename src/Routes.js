@@ -7,6 +7,7 @@ import { Account } from './components/Accounts';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Status from './components/Status';
+import PostTask from './components/PostTask'
 
 
 export default function Routes() {
@@ -14,7 +15,7 @@ export default function Routes() {
     <Account>
       <Status />
       <Switch>
-        
+
         <Route exact path="/">
           <Home />
         </Route>
@@ -25,6 +26,10 @@ export default function Routes() {
 
         <Route exact path="/signup">
           <Signup />
+        </Route>
+
+        <Route exact path="/postTask">
+          <PostTask />
         </Route>
 
         {/* Finally, catch all unmatched routes */}

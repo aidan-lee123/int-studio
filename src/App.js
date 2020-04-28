@@ -21,7 +21,7 @@ export default () => {
       <Navbar fluid collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to="/">Scratch</Link>
+            <Link to="/">Learn Together</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
