@@ -1,14 +1,21 @@
-import React from "react";
+import React from 'react';
 import { Link } from "react-router-dom";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
 
-import "./App.css";
+
+
 import Routes from "./Routes";
 
+/*<Account>
+<Status />
+<Signup />
+<Login />
+</Account>*/
 
-function App() {
+
+export default () => {
   return (
     <div className="App container">
       <Navbar fluid collapseOnSelect>
@@ -32,7 +39,4 @@ function App() {
       <Routes />
     </div>
   );
-}
-
-
-export default App;
+};

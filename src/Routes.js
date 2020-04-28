@@ -1,25 +1,38 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import Home from "./containers/Home";
-import NotFound from "./containers/NotFound";
-import Login from "./containers/Login";
+import Home from "./components/Home";
+import NotFound from "./components/NotFound";
+
+import { Account } from './components/Accounts';
+import Signup from './components/Signup';
+import Login from './components/Login';
+import Status from './components/Status';
 
 
 export default function Routes() {
   return (
-    <Switch>
-      <Route exact path="/">
-        <Home />
-      </Route>
-      <Route exact path="/login">
-        <Login />
-      </Route>
+    <Account>
+      <Status />
+      <Switch>
+        
+        <Route exact path="/">
+          <Home />
+        </Route>
 
+        <Route exact path="/login">
+          <Login />
+        </Route>
 
-      {/* Finally, catch all unmatched routes */}
-      <Route>
-        <NotFound />
-      </Route>
-    </Switch>
+        <Route exact path="/signup">
+          <Signup />
+        </Route>
+
+        {/* Finally, catch all unmatched routes */}
+        <Route>
+          <NotFound />
+        </Route>
+
+      </Switch>
+    </Account>
   );
 }

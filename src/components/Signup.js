@@ -1,23 +1,29 @@
-import React, { useState } from "react";
+import React, {useState } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import "./Login.css";
+import UserPool from '../UserPool';
 
-export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  function validateForm() {
+export default () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+    function validateForm() {
     return email.length > 0 && password.length > 0;
   }
 
-  function handleSubmit(event) {
+  const onSubmit = event => {
     event.preventDefault();
-  }
+
+    UserPool.signUp(email, password, [], null, (err, data) => {
+      if (err) console.error(err);
+      console.log(data);
+    });
+  };
 
   return (
     <div className="Login">
-      <form onSubmit={handleSubmit}>
-        <FormGroup controlId="email" bsSize="large">
+      <form onSubmit={onSubmit}>
+      <FormGroup controlId="email" bsSize="large">
           <ControlLabel>Email</ControlLabel>
           <FormControl
             autoFocus
@@ -35,9 +41,9 @@ export default function Login() {
           />
         </FormGroup>
         <Button block bsSize="large" disabled={!validateForm()} type="submit">
-          Login
+          Signup
         </Button>
-      </form>
+        </form>
     </div>
   );
-}
+};
