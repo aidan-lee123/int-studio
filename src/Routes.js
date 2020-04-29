@@ -8,6 +8,11 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 
 import NewTask from './components/NewTask'
+import Tasks from "./components/Tasks";
+
+import Settings from "./components/Settings";
+
+
 
 
 export default function Routes() {
@@ -15,6 +20,13 @@ export default function Routes() {
 
 
       <Switch>
+        <Route exact path="/settings">
+          <Settings />
+        </Route>
+        <Route exact path="/tasks/:id">
+          <Tasks />
+        </Route>
+
         <Route exact path="/">
           <Home />
         </Route>

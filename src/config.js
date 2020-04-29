@@ -6,7 +6,7 @@ export default {
     },
     apiGateway: {
       REGION: "ap-southeast-2",
-      URL: "https://rxxuvqzm9d.execute-api.ap-southeast-2.amazonaws.com/dev/tasks"
+      URL: "https://rxxuvqzm9d.execute-api.ap-southeast-2.amazonaws.com/dev"
     },
     cognito: {
       REGION: "ap-southeast-2",
