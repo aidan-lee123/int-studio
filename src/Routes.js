@@ -3,19 +3,18 @@ import { Route, Switch } from "react-router-dom";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 
-import { Account } from './components/Accounts';
+
 import Signup from './components/Signup';
 import Login from './components/Login';
-import Status from './components/Status';
-import PostTask from './components/PostTask'
+
+import NewTask from './components/NewTask'
 
 
 export default function Routes() {
   return (
-    <Account>
-      <Status />
-      <Switch>
 
+
+      <Switch>
         <Route exact path="/">
           <Home />
         </Route>
@@ -28,8 +27,8 @@ export default function Routes() {
           <Signup />
         </Route>
 
-        <Route exact path="/postTask">
-          <PostTask />
+        <Route exact path="/tasks/new">
+          <NewTask />
         </Route>
 
         {/* Finally, catch all unmatched routes */}
@@ -38,6 +37,6 @@ export default function Routes() {
         </Route>
 
       </Switch>
-    </Account>
+
   );
 }

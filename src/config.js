@@ -1,11 +1,12 @@
 export default {
+    MAX_ATTACHMENT_SIZE: 5000000,
     s3: {
       REGION: "ap-southeast-2",
       BUCKET: "int-studio-website"
     },
     apiGateway: {
       REGION: "ap-southeast-2",
-      URL: "https://rxxuvqzm9d.execute-api.ap-southeast-2.amazonaws.com/dev"
+      URL: "https://rxxuvqzm9d.execute-api.ap-southeast-2.amazonaws.com/dev/tasks"
     },
     cognito: {
       REGION: "ap-southeast-2",
