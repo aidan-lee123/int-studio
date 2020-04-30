@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
+import { PageHeader, ListGroup, ListGroupItem, but } from "react-bootstrap";
+
 import { LinkContainer } from "react-router-bootstrap";
 
 import { useAppContext } from "../libs/contextLib";
@@ -36,7 +37,7 @@ export default function Home() {
   
   function loadTasks() {
 
-    return API.get("tasks", "/tasks");
+    return API.get("tasks", "/tasks/all");
     
   }
 
