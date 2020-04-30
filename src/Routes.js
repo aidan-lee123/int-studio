@@ -7,7 +7,9 @@ import NotFound from "./components/NotFound";
 import Signup from './components/Signup';
 import Login from './components/Login';
 
-import NewTask from './components/NewTask'
+import NewTask from './components/NewTask';
+import Tasks from "./components/Tasks";
+
 
 
 export default function Routes() {
@@ -30,6 +32,11 @@ export default function Routes() {
         <Route exact path="/tasks/new">
           <NewTask />
         </Route>
+
+        <Route exact path="/tasks/:id">
+          <Tasks />
+        </Route>
+
 
         {/* Finally, catch all unmatched routes */}
         <Route>
