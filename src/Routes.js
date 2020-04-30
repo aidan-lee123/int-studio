@@ -10,6 +10,8 @@ import Login from './components/Login';
 import NewTask from './components/NewTask';
 import Tasks from "./components/Tasks";
 
+import Profile from "./components/Profile";
+
 
 
 export default function Routes() {
@@ -17,6 +19,8 @@ export default function Routes() {
 
 
       <Switch>
+
+
         <Route exact path="/">
           <Home />
         </Route>
@@ -27,6 +31,10 @@ export default function Routes() {
 
         <Route exact path="/signup">
           <Signup />
+        </Route>
+
+        <Route exact path="/profile">
+          <Profile />
         </Route>
 
         <Route exact path="/tasks/new">

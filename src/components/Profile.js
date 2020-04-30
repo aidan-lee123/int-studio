@@ -7,7 +7,6 @@ import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import "./Home.css";
 import { API, Auth } from "aws-amplify";
-import { getDefaultNormalizer } from "@testing-library/react";
 
 
 
@@ -15,7 +14,12 @@ export default function Home() {
   const [tasks, setTasks] = useState([]);
   const { isAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
+  const [userInfo, setUserInfo] = useState();
 
+
+  async function getUserInfo() {
+
+  }
   useEffect(() => {
     async function onLoad() {
       if (!isAuthenticated) {
@@ -38,16 +42,16 @@ export default function Home() {
   
   function loadTasks() {
     getUserName();
-    return API.get("tasks", "/tasks/all");
+    return API.get("tasks", "/tasks");
     
     
   }
 
   //This is the current user name lol
   async function getUserName() {
-    const tokens = await Auth.currentSession();
-    const userNameTemp = tokens.getIdToken().payload['cognito:username'];
-    setUserName(userNameTemp);
+    const currentUserInfo = await Auth.currentUserInfo()
+    const userNameTemp = currentUserInfo.attributes['name']
+    setUserInfo(userNameTemp);
   }
 
 
@@ -58,7 +62,7 @@ export default function Home() {
           <ListGroupItem header={task.content.trim().split("\n")[0]}>
             {"Created: " + new Date(task.createdAt).toLocaleString()} 
             <br />
-            {"User: " + task.userId}
+            {"User: " + userInfo}
           </ListGroupItem>
         </LinkContainer>
       ) : (
@@ -85,7 +89,7 @@ export default function Home() {
   function renderTasks() {
     return (
       <div className="tasks">
-        <PageHeader>All Tasks</PageHeader>
+        <PageHeader>Your Tasks</PageHeader>
         <ListGroup>
           {!isLoading && renderTasksList(tasks)}
         </ListGroup>

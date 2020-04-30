@@ -15,7 +15,7 @@ export default function LoaderButton({
       disabled={disabled || isLoading}
       {...props}
     >
-      {isLoading && <FaSyncAlt className="spinning" />}
+      {isLoading && <Glyphicon glyph="refresh" className="spinning" />}
       {props.children}
     </Button>
   );

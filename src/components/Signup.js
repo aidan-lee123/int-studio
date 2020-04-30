@@ -11,13 +11,13 @@ import { useAppContext } from "../libs/contextLib";
 import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
 import "./Signup.css";
-
 import { Auth } from "aws-amplify";
 
 
 export default function Signup() {
   const [fields, handleFieldChange] = useFormFields({
     email: "",
+    name: "",
     password: "",
     confirmPassword: "",
     confirmationCode: "",
@@ -30,6 +30,7 @@ export default function Signup() {
   function validateForm() {
     return (
       fields.email.length > 0 &&
+      fields.name.length > 0 &&
       fields.password.length > 0 &&
       fields.password === fields.confirmPassword
     );
@@ -48,6 +49,9 @@ export default function Signup() {
       const newUser = await Auth.signUp({
         username: fields.email,
         password: fields.password,
+        attributes: {
+          name: fields.name
+        }
       });
       setIsLoading(false);
       setNewUser(newUser);
@@ -111,6 +115,17 @@ export default function Signup() {
             value={fields.email}
             onChange={handleFieldChange}
           />
+
+        <FormGroup controlId="name" bsSize="large">
+          <ControlLabel>Name</ControlLabel>
+          <FormControl
+            autoFocus
+            type="text"
+            value={fields.name}
+            onChange={handleFieldChange}
+          />
+        </FormGroup>
+
         </FormGroup>
         <FormGroup controlId="password" bsSize="large">
           <ControlLabel>Password</ControlLabel>
