@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
+import React from "react";
+import { Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-
-import { useAppContext } from "../libs/contextLib";
-import { onError } from "../libs/errorLib";
 import "./Home.css";
-import { API } from "aws-amplify";
-
-
 
 export default function Home() {
+<<<<<<< HEAD
   const [tasks, setTasks] = useState([]);
   const { isAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
@@ -68,27 +63,19 @@ export default function Home() {
 
   function renderLander() {
     return (
-      <div className="lander">
-        <h1>Scratch</h1>
-        <p>A simple note taking app</p>
-      </div>
-    );
-  }
-
-  function renderTasks() {
-    return (
-      <div className="tasks">
-        <PageHeader>Your Tasks</PageHeader>
-        <ListGroup>
-          {!isLoading && renderTasksList(tasks)}
-        </ListGroup>
-      </div>
-    );
-  }
-
+=======
   return (
     <div className="Home">
-      {isAuthenticated ? renderTasks() : renderLander()}
+>>>>>>> parent of e885276... Started on Task Posting
+      <div className="lander">
+        <h1>Learn Together</h1>
+        <p>Lorem ipsum</p>
+
+        <LinkContainer to="/postTask">
+          <Button> Post A Task </Button>
+        </LinkContainer>
+        <Button> Search Tasks</Button>
+      </div>
     </div>
   );
 }

@@ -1,71 +1,55 @@
-import React, { useState } from "react";
-import { Auth } from "aws-amplify";
-import { useHistory } from "react-router-dom";
-import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import LoaderButton from "../components/LoaderButton";
-import { useAppContext } from "../libs/contextLib";
-import { useFormFields } from "../libs/hooksLib";
-import { onError } from "../libs/errorLib";
+import React, { useState, useContext} from "react";
+import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { AccountContext } from './Accounts';
 import "./Login.css";
 
-export default function Login() {
-  const history = useHistory();
-  const { userHasAuthenticated } = useAppContext();
-  const [isLoading, setIsLoading] = useState(false);
-  const [fields, handleFieldChange] = useFormFields({
-    email: "",
-    password: ""
-  });
+export default () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const { authenticate } = useContext(AccountContext);
 
   function validateForm() {
-    return fields.email.length > 0 && fields.password.length > 0;
+    return email.length > 0 && password.length > 0;
   }
 
-  async function handleSubmit(event) {
+
+  const onSubmit = event => {
     event.preventDefault();
 
-    setIsLoading(true);
-
-    try {
-      await Auth.signIn(fields.email, fields.password);
-      userHasAuthenticated(true);
-      history.push("/");
-    } catch (e) {
-      onError(e);
-      setIsLoading(false);
-    }
-  }
+    authenticate(email, password)
+        .then(data => {
+            console.log('Logged in!', data);
+        })
+        .catch(err => {
+            console.error('Failed to login!', err);
+        })
+  };
 
   return (
     <div className="Login">
-      <form onSubmit={handleSubmit}>
-        <FormGroup controlId="email" bsSize="large">
+      <form onSubmit={onSubmit}>
+      <FormGroup controlId="email" bsSize="large">
           <ControlLabel>Email</ControlLabel>
           <FormControl
             autoFocus
             type="email"
-            value={fields.email}
-            onChange={handleFieldChange}
+            value={email}
+            onChange={e => setEmail(e.target.value)}
           />
         </FormGroup>
         <FormGroup controlId="password" bsSize="large">
           <ControlLabel>Password</ControlLabel>
           <FormControl
+            value={password}
+            onChange={e => setPassword(e.target.value)}
             type="password"
-            value={fields.password}
-            onChange={handleFieldChange}
           />
         </FormGroup>
-        <LoaderButton
-          block
-          type="submit"
-          bsSize="large"
-          isLoading={isLoading}
-          disabled={!validateForm()}
-        >
+        <Button block bsSize="large" disabled={!validateForm()} type="submit">
           Login
-        </LoaderButton>
-      </form>
+        </Button>
+        </form>
     </div>
   );
-}
+};
