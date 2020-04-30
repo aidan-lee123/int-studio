@@ -16,7 +16,6 @@ export default function NewTask() {
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-
   function validateForm() {
     return content.length > 0;
   }
@@ -27,7 +26,6 @@ export default function NewTask() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-
   
     if (file.current && file.current.size > config.MAX_ATTACHMENT_SIZE) {
       alert(

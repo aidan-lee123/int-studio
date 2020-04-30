@@ -3,39 +3,18 @@ import { Route, Switch } from "react-router-dom";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 
-import { Account } from './components/Accounts';
+
 import Signup from './components/Signup';
 import Login from './components/Login';
-<<<<<<< HEAD
 
-import NewTask from './components/NewTask';
-import Tasks from "./components/Tasks";
-
-import Settings from "./components/Settings";
-
-
-=======
-import Status from './components/Status';
-import PostTask from './components/PostTask'
->>>>>>> parent of e885276... Started on Task Posting
+import NewTask from './components/NewTask'
 
 
 export default function Routes() {
   return (
-    <Account>
-      <Status />
+
+
       <Switch>
-<<<<<<< HEAD
-        <Route exact path="/settings">
-          <Settings />
-        </Route>
-
-        <Route exact path="/tasks/:id">
-          <Tasks />
-        </Route>
-=======
->>>>>>> parent of e885276... Started on Task Posting
-
         <Route exact path="/">
           <Home />
         </Route>
@@ -48,8 +27,8 @@ export default function Routes() {
           <Signup />
         </Route>
 
-        <Route exact path="/postTask">
-          <PostTask />
+        <Route exact path="/tasks/new">
+          <NewTask />
         </Route>
 
         {/* Finally, catch all unmatched routes */}
@@ -58,6 +37,6 @@ export default function Routes() {
         </Route>
 
       </Switch>
-    </Account>
+
   );
 }
