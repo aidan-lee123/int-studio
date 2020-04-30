@@ -22,8 +22,10 @@ export default function Home() {
   
       try {
         const tasks = await loadTasks();
-        console.log("LOADED TASKS");
+
         setTasks(tasks);
+
+        console.log("LOADED TASKS");
       } catch (e) {
         onError(e);
       }
@@ -50,13 +52,17 @@ export default function Home() {
         </LinkContainer>
       ) : (
         <LinkContainer key="new" to="/tasks/new">
+
           <ListGroupItem>
+          {console.log("here")}
             <h4>
-              <b>{"\uFF0B"}</b> Create a new note
+              <b>{"\uFF0B"}</b> Create a new task
             </h4>
           </ListGroupItem>
         </LinkContainer>
       )
+
+      
     );
   }
 
