@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
-
+import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 
 import { useAppContext } from "../libs/contextLib";
@@ -79,9 +79,18 @@ export default function Home() {
       <div className="lander">
         <h1>Scratch</h1>
         <p>A simple note taking app</p>
+        <div>
+          <Link to="/login" className="btn btn-info btn-lg">
+            Login
+          </Link>
+          <Link to="/signup" className="btn btn-success btn-lg">
+            Signup
+          </Link>
+        </div>
       </div>
     );
   }
+  
 
   function renderTasks() {
     return (
