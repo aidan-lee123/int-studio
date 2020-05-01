@@ -15,6 +15,7 @@ export default function Home() {
   const [tasks, setTasks] = useState([]);
   const { isAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
+  const [userName, setUserName] = useState();
 
   useEffect(() => {
     async function onLoad() {
