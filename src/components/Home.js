@@ -44,16 +44,19 @@ export default function Home() {
     
   }
 
+  function loadUser(task){
+    return API.get("tasks", `/users/${task.userName}`)
+  }
 
 
   function renderTasksList(tasks) {
     return [{}].concat(tasks).map((task, i) =>
       i !== 0 ? (
         <LinkContainer key={task.taskId} to={`/tasks/${task.taskId}/view`}>
-          <ListGroupItem header={task.content.trim().split("\n")[0]}>
+          <ListGroupItem header={task.title.trim().split("\n")[0]}>
             {"Created: " + new Date(task.createdAt).toLocaleString()} 
             <br />
-            {"User: " + task.userId}
+            {"User: " + task.userName}
           </ListGroupItem>
         </LinkContainer>
       ) : (
@@ -71,8 +74,7 @@ export default function Home() {
   function renderLander() {
     return (
       <div className="lander">
-        <h1>Scratch</h1>
-        <p>A simple note taking app</p>
+        <h1>Learn Together</h1>
         <div>
           <Link to="/login" className="btn btn-info btn-lg">
             Login

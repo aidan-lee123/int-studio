@@ -66,12 +66,12 @@ export default function ViewTask() {
     async function onLoad() {
       try {
         const task = await loadTask();
-        const { content, title, points, userId } = task;
+        const { content, title, points, userId, userName } = task;
 
         setContent(content);
         setTitle(title);
         setPoints(points);
-        setUserId(userId);
+        setUserId(userName);
 
         setTask(task);
       } catch (e) {
@@ -89,7 +89,7 @@ export default function ViewTask() {
         <Grid item xs>
           <Card className={classes.profile}>
 
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
+            <Avatar alt={userId} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
             {userId}
             <CardContent>
 
