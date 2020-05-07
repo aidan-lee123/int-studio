@@ -5,9 +5,9 @@ import { onError } from "../libs/errorLib";
 
 import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
-import config from "../config";
+
 import "./Tasks.css";
-import { s3Upload } from "../libs/awsLib";
+import { Slider, Typography } from '@material-ui/core';
 
 
 export default function Tasks() {
@@ -16,6 +16,8 @@ export default function Tasks() {
     const history = useHistory();
     const [task, setTask] = useState(null);
     const [content, setContent] = useState("");
+    const [title, setTitle] = useState("");
+    const [points, setPoints] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     
@@ -28,13 +30,11 @@ export default function Tasks() {
     async function onLoad() {
       try {
         const task = await loadTask();
-        const { content, attachment } = task;
-
-        if (attachment) {
-          task.attachmentURL = await Storage.vault.get(attachment);
-        }
+        const { content, points, title } = task;
 
         setContent(content);
+        setTitle(title);
+        setPoints(points);
         setTask(task);
       } catch (e) {
         onError(e);
@@ -52,9 +52,7 @@ export default function Tasks() {
     return str.replace(/^\w+-/, "");
   }
   
-  function handleFileChange(event) {
-    file.current = event.target.files[0];
-  }
+
   function saveTask(task) {
     return API.put("tasks", `/tasks/${id}`, {
       body: task
@@ -62,29 +60,15 @@ export default function Tasks() {
   }
   
   async function handleSubmit(event) {
-    let attachment;
-  
     event.preventDefault();
-  
-    if (file.current && file.current.size > config.MAX_ATTACHMENT_SIZE) {
-      alert(
-        `Please pick a file smaller than ${
-          config.MAX_ATTACHMENT_SIZE / 1000000
-        } MB.`
-      );
-      return;
-    }
   
     setIsLoading(true);
   
     try {
-      if (file.current) {
-        attachment = await s3Upload(file.current);
-      }
-  
       await saveTask({
         content,
-        attachment: attachment || task.attachment
+        title,
+        points
       });
       history.push("/");
     } catch (e) {
@@ -92,6 +76,10 @@ export default function Tasks() {
       setIsLoading(false);
     }
   }
+
+  const handleSliderChange = (event, newValue) => {
+    setPoints(newValue);
+  };
   
   function deleteTask() {
     return API.del("tasks", `/tasks/${id}`);
@@ -123,31 +111,40 @@ export default function Tasks() {
     <div className="Tasks">
       {task && (
         <form onSubmit={handleSubmit}>
-          <FormGroup controlId="content">
-            <FormControl
-              value={content}
-              componentClass="textarea"
-              onChange={e => setContent(e.target.value)}
-            />
-          </FormGroup>
-          {task.attachment && (
-            <FormGroup>
-              <ControlLabel>Attachment</ControlLabel>
-              <FormControl.Static>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={task.attachmentURL}
-                >
-                  {formatFilename(task.attachment)}
-                </a>
-              </FormControl.Static>
-            </FormGroup>
-          )}
-          <FormGroup controlId="file">
-            {!task.attachment && <ControlLabel>Attachment</ControlLabel>}
-            <FormControl onChange={handleFileChange} type="file" />
-          </FormGroup>
+         <FormGroup controlId="title">
+          <FormControl
+            placeholder="Enter Title"
+            value={title}
+            componentClass="textarea"
+            onChange={e => setTitle(e.target.value)}
+          />
+        </FormGroup>
+
+        <FormGroup controlId="content">
+          <FormControl
+            placeholder="Enter Description"
+            value={content}
+            componentClass="textarea"
+            onChange={e => setContent(e.target.value)}
+          />
+        </FormGroup>
+        
+        <Typography id="range-slider" gutterBottom variant="h3">
+          Points 
+        </Typography>
+
+        
+        <Slider
+        defaultValue={0}
+        value={points}
+        aria-labelledby="discrete-slider-small-steps"
+        step={1}
+        min={0}
+        max={30}
+        valueLabelDisplay="auto"
+        onChange={handleSliderChange}
+        />
+
           <LoaderButton
             block
             type="submit"

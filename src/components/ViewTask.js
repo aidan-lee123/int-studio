@@ -3,38 +3,76 @@ import { useParams, useHistory } from "react-router-dom";
 import { API, Storage } from "aws-amplify";
 import { onError } from "../libs/errorLib";
 
-import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import LoaderButton from "../components/LoaderButton";
-import config from "../config";
-import "./Tasks.css";
-import { s3Upload } from "../libs/awsLib";
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import Chip from '@material-ui/core/Chip';
+import Grid from '@material-ui/core/Grid';
 
+import "./ViewTask.css";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    minHeight: 500,
+  },
+  profile: {
+    padding: theme.spacing(2),
+    height: '100%',
+    maxWidth: 350,
+    textAlign: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    
+  },
+  task: {
+    textAlign: 'center',
+
+  },
+  points: {
+    margin: '10px',
+    fontSize: 12,
+  },
+  avatar: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  button: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+}));
 
 export default function ViewTask() {
-    const file = useRef(null);
+    const classes = useStyles();
     const { id } = useParams();
-    const history = useHistory();
     const [task, setTask] = useState(null);
     const [content, setContent] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
+    const [title, setTitle] = useState("");
+    const [points, setPoints] = useState();
+    const [userId, setUserId] = useState("");
     
 
   useEffect(() => {
     function loadTask() {
-      return API.get("tasks", `/tasks/${id}`);
+      return API.get("tasks", `/tasks/${id}/view`);
     }
 
     async function onLoad() {
       try {
         const task = await loadTask();
-        const { content, attachment } = task;
-
-        if (attachment) {
-          task.attachmentURL = await Storage.vault.get(attachment);
-        }
+        const { content, title, points, userId } = task;
 
         setContent(content);
+        setTitle(title);
+        setPoints(points);
+        setUserId(userId);
+
         setTask(task);
       } catch (e) {
         onError(e);
@@ -43,131 +81,54 @@ export default function ViewTask() {
 
     onLoad();
   }, [id]);
-
-  function validateForm() {
-    return content.length > 0;
-  }
-  
-  function formatFilename(str) {
-    return str.replace(/^\w+-/, "");
-  }
-  
-  function handleFileChange(event) {
-    file.current = event.target.files[0];
-  }
-  function saveTask(task) {
-    return API.put("tasks", `/tasks/${id}`, {
-      body: task
-    });
-  }
-  
-  async function handleSubmit(event) {
-    let attachment;
-  
-    event.preventDefault();
-  
-    if (file.current && file.current.size > config.MAX_ATTACHMENT_SIZE) {
-      alert(
-        `Please pick a file smaller than ${
-          config.MAX_ATTACHMENT_SIZE / 1000000
-        } MB.`
-      );
-      return;
-    }
-  
-    setIsLoading(true);
-  
-    try {
-      if (file.current) {
-        attachment = await s3Upload(file.current);
-      }
-  
-      await saveTask({
-        content,
-        attachment: attachment || task.attachment
-      });
-      history.push("/");
-    } catch (e) {
-      onError(e);
-      setIsLoading(false);
-    }
-  }
-  
-  function deleteTask() {
-    return API.del("tasks", `/tasks/${id}`);
-  }
-  
-  async function handleDelete(event) {
-    event.preventDefault();
-  
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this task?"
-    );
-  
-    if (!confirmed) {
-      return;
-    }
-  
-    setIsDeleting(true);
-  
-    try {
-      await deleteTask();
-      history.push("/");
-    } catch (e) {
-      onError(e);
-      setIsDeleting(false);
-    }
-  }
   
   return (
-    <div className="Tasks">
+    <div>
       {task && (
-        <form onSubmit={handleSubmit}>
-          <FormGroup controlId="content">
-            <FormControl
-              value={content}
-              componentClass="textarea"
-              onChange={e => setContent(e.target.value)}
-            />
-          </FormGroup>
-          {task.attachment && (
-            <FormGroup>
-              <ControlLabel>Attachment</ControlLabel>
-              <FormControl.Static>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={task.attachmentURL}
-                >
-                  {formatFilename(task.attachment)}
-                </a>
-              </FormControl.Static>
-            </FormGroup>
-          )}
-          <FormGroup controlId="file">
-            {!task.attachment && <ControlLabel>Attachment</ControlLabel>}
-            <FormControl onChange={handleFileChange} type="file" />
-          </FormGroup>
-          <LoaderButton
-            block
-            type="submit"
-            bsSize="large"
-            bsStyle="primary"
-            isLoading={isLoading}
-            disabled={!validateForm()}
-          >
-            Save
-          </LoaderButton>
-          <LoaderButton
-            block
-            bsSize="large"
-            bsStyle="danger"
-            onClick={handleDelete}
-            isLoading={isDeleting}
-          >
-            Delete
-          </LoaderButton>
-        </form>
+      <Grid container className={classes.root} spacing={2} justify="center" alignItems="center">
+        <Grid item xs>
+          <Card className={classes.profile}>
+
+            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
+            {userId}
+            <CardContent>
+
+              <Typography gutterBottom variant="h4" component="h2">
+                User Name
+              </Typography>
+
+              <Typography variant="body1" color="textSecondary" component="p">
+                User Bio
+              </Typography>
+
+            </CardContent>
+
+            <CardActions>
+              <Button size="small" color="primary" className={classes.button}>
+                Profile
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+
+        
+        <Grid item xs>
+          <Container className={classes.task}>
+
+            <Typography gutterBottom variant="h1" component="h2">
+              {title}
+            </Typography>
+
+            <Typography variant="body" color="textSecondary" component="p">
+              {content}
+            </Typography>
+
+            <Chip className={classes.points} label={"Points: " + points} />
+
+          </Container>
+        </Grid>
+
+      </Grid>
       )}
     </div>
   );

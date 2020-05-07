@@ -9,6 +9,7 @@ import Login from './components/Login';
 
 import NewTask from './components/NewTask';
 import Tasks from "./components/Tasks";
+import ViewTask from './components/ViewTask';
 
 import Profile from "./components/Profile";
 
@@ -41,7 +42,11 @@ export default function Routes() {
           <NewTask />
         </Route>
 
-        <Route exact path="/tasks/:id">
+        <Route exact path="/tasks/:id/view">
+          <ViewTask />
+        </Route>
+
+        <Route exact path="/tasks/:id/edit">
           <Tasks />
         </Route>
 

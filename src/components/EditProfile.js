@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
-import { Link } from "react-router-dom";
+
 import { LinkContainer } from "react-router-bootstrap";
 
 import { useAppContext } from "../libs/contextLib";
@@ -10,13 +10,16 @@ import { API, Auth } from "aws-amplify";
 
 
 
-
-export default function Home() {
+export default function EditProfile() {
   const [tasks, setTasks] = useState([]);
   const { isAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
+  const [userInfo, setUserInfo] = useState();
 
 
+  async function getUserInfo() {
+
+  }
   useEffect(() => {
     async function onLoad() {
       if (!isAuthenticated) {
@@ -38,22 +41,28 @@ export default function Home() {
   }, [isAuthenticated]);
   
   function loadTasks() {
-
-    return API.get("tasks", "/tasks/all");
+    getUserName();
+    return API.get("tasks", "/tasks");
     
     
   }
 
+  //This is the current user name lol
+  async function getUserName() {
+    const currentUserInfo = await Auth.currentUserInfo()
+    const userNameTemp = currentUserInfo.attributes['name']
+    setUserInfo(userNameTemp);
+  }
 
 
   function renderTasksList(tasks) {
     return [{}].concat(tasks).map((task, i) =>
       i !== 0 ? (
-        <LinkContainer key={task.taskId} to={`/tasks/${task.taskId}/view`}>
+        <LinkContainer key={task.taskId} to={`/tasks/${task.taskId}`}>
           <ListGroupItem header={task.content.trim().split("\n")[0]}>
             {"Created: " + new Date(task.createdAt).toLocaleString()} 
             <br />
-            {"User: " + task.userId}
+            {"User: " + userInfo}
           </ListGroupItem>
         </LinkContainer>
       ) : (
@@ -73,23 +82,14 @@ export default function Home() {
       <div className="lander">
         <h1>Scratch</h1>
         <p>A simple note taking app</p>
-        <div>
-          <Link to="/login" className="btn btn-info btn-lg">
-            Login
-          </Link>
-          <Link to="/signup" className="btn btn-success btn-lg">
-            Signup
-          </Link>
-        </div>
       </div>
     );
   }
-  
 
   function renderTasks() {
     return (
       <div className="tasks">
-        <PageHeader>All Tasks</PageHeader>
+        <PageHeader>Your Tasks</PageHeader>
         <ListGroup>
           {!isLoading && renderTasksList(tasks)}
         </ListGroup>

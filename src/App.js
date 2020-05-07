@@ -44,8 +44,8 @@ export default () => {
   
   return (
     !isAuthenticating &&
-    <div className="App container">
-      <Navbar fluid collapseOnSelect>
+    <div className="container">
+      <Navbar fluid collapseOnSelect staticTop>
         <Navbar.Header>
           <Navbar.Brand>
             <Link to="/">Learn Together</Link>

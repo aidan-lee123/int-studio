@@ -18,6 +18,7 @@ export default function Signup() {
   const [fields, handleFieldChange] = useFormFields({
     email: "",
     name: "",
+    degree: "",
     password: "",
     confirmPassword: "",
     confirmationCode: "",
@@ -31,8 +32,10 @@ export default function Signup() {
     return (
       fields.email.length > 0 &&
       fields.name.length > 0 &&
+      fields.degree.length > 0  &&
       fields.password.length > 0 &&
-      fields.password === fields.confirmPassword
+      fields.password === fields.confirmPassword 
+      
     );
   }
 
@@ -50,7 +53,10 @@ export default function Signup() {
         username: fields.email,
         password: fields.password,
         attributes: {
-          name: fields.name
+          name: fields.name,
+          'custom:points': '30',
+          'custom:degree': fields.degree,
+          'custom:bio': '',
         }
       });
       setIsLoading(false);
@@ -117,11 +123,21 @@ export default function Signup() {
           />
 
         <FormGroup controlId="name" bsSize="large">
-          <ControlLabel>Name</ControlLabel>
+          <ControlLabel>Full Name</ControlLabel>
           <FormControl
             autoFocus
             type="text"
             value={fields.name}
+            onChange={handleFieldChange}
+          />
+        </FormGroup>
+
+        <FormGroup controlId="degree" bsSize="large">
+          <ControlLabel>Degree</ControlLabel>
+          <FormControl
+            autoFocus
+            type="text"
+            value={fields.degree}
             onChange={handleFieldChange}
           />
         </FormGroup>

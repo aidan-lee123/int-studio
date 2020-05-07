@@ -7,6 +7,7 @@ import config from "../config";
 import "./NewTask.css";
 import { API } from "aws-amplify";
 import { s3Upload } from "../libs/awsLib";
+import { Slider, Typography } from '@material-ui/core';
 
 
 
@@ -14,6 +15,8 @@ export default function NewTask() {
   const file = useRef(null);
   const history = useHistory();
   const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
+  const [points, setPoints] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   function validateForm() {
@@ -41,7 +44,7 @@ export default function NewTask() {
     try {
       const attachment = file.current ? await s3Upload(file.current) : null;
   
-      await createTask({ content, attachment });
+      await createTask({ content, title, points });
       history.push("/");
     } catch (e) {
       onError(e);
@@ -56,20 +59,46 @@ export default function NewTask() {
     });
   }
 
+  const handleSliderChange = (event, newValue) => {
+    setPoints(newValue);
+  };
+
   return (
     <div className="NewTask">
       <form onSubmit={handleSubmit}>
+      <FormGroup controlId="title">
+          <FormControl
+            placeholder="Enter Title"
+            value={title}
+            componentClass="textarea"
+            onChange={e => setTitle(e.target.value)}
+          />
+        </FormGroup>
+
         <FormGroup controlId="content">
           <FormControl
+            placeholder="Enter Description"
             value={content}
             componentClass="textarea"
             onChange={e => setContent(e.target.value)}
           />
         </FormGroup>
-        <FormGroup controlId="file">
-          <ControlLabel>Attachment</ControlLabel>
-          <FormControl onChange={handleFileChange} type="file" />
-        </FormGroup>
+        
+        <Typography id="range-slider" gutterBottom>
+          Points 
+        </Typography>
+
+        <Slider
+        defaultValue={0}
+        value={points}
+        aria-labelledby="discrete-slider-small-steps"
+        step={1}
+        min={0}
+        max={30}
+        valueLabelDisplay="auto"
+        onChange={handleSliderChange}
+        />
+
         <LoaderButton
           block
           type="submit"
