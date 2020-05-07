@@ -8,10 +8,66 @@ import { onError } from "../libs/errorLib";
 import "./Home.css";
 import { API, Auth } from "aws-amplify";
 
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar'
+import Chip from '@material-ui/core/Chip';
+import Grid from '@material-ui/core/Grid'
+import { CardActionArea } from "@material-ui/core";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    minHeight: 500,
+  },
+  profile: {
+    padding: theme.spacing(2),
+    margin: 20,
+    maxWidth: 350,
+    textAlign: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    
+  },
+  task: {
+    textAlign: 'center',
 
+  },
+  points: {
+    margin: '10px',
+    fontSize: 12,
+  },
+  avatar: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  button: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },  
+  gridList: {
+    minHeight: 400,
+    flexWrap: 'nowrap',
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
+  },
+  tile: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    background:
+    'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+  }
+}));
 
 export default function Home() {
+  const classes = useStyles();
   const [tasks, setTasks] = useState([]);
   const { isAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
@@ -50,22 +106,40 @@ export default function Home() {
 
 
   function renderTasksList(tasks) {
+    
     return [{}].concat(tasks).map((task, i) =>
       i !== 0 ? (
         <LinkContainer key={task.taskId} to={`/tasks/${task.taskId}/view`}>
-          <ListGroupItem header={task.title.trim().split("\n")[0]}>
-            {"Created: " + new Date(task.createdAt).toLocaleString()} 
-            <br />
-            {"User: " + task.userName}
-          </ListGroupItem>
+          <Card className={classes.profile}>
+          <CardActionArea>
+            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
+
+              <CardContent>
+
+                <Typography gutterBottom variant="h4" component="h2">
+                  {task.title}
+                </Typography>
+
+                <Typography variant="body1" color="textSecondary" component="p">
+                  {"Created: " + new Date(task.createdAt).toLocaleString()} 
+                </Typography>
+
+                <Chip className={classes.points} label={"Points: " + task.points} />
+
+              </CardContent>
+            </CardActionArea>
+            </Card>
+
         </LinkContainer>
       ) : (
         <LinkContainer key="new" to="/tasks/new">
-          <ListGroupItem>
+          <Card className={classes.profile}>
+            <CardActionArea>
             <h4>
               <b>{"\uFF0B"}</b> Create a new task
             </h4>
-          </ListGroupItem>
+            </CardActionArea>
+          </Card>
         </LinkContainer>
       )
     );
@@ -92,9 +166,9 @@ export default function Home() {
     return (
       <div className="tasks">
         <PageHeader>All Tasks</PageHeader>
-        <ListGroup>
+        <Grid container className={classes.root} spacing={2}>
           {!isLoading && renderTasksList(tasks)}
-        </ListGroup>
+        </Grid>
       </div>
     );
   }
