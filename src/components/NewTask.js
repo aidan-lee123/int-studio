@@ -1,18 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { FormGroup, FormControl } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import { onError } from "../libs/errorLib";
-import config from "../config";
 import "./NewTask.css";
 import { API } from "aws-amplify";
-import { s3Upload } from "../libs/awsLib";
 import { Slider, Typography } from '@material-ui/core';
 
 
 
 export default function NewTask() {
-  const file = useRef(null);
   const history = useHistory();
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
@@ -25,10 +22,6 @@ export default function NewTask() {
       title.length > 0 &&
       points > 0
       );
-  }
-
-  function handleFileChange(event) {
-    file.current = event.target.files[0];
   }
 
   async function handleSubmit(event) {

@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { API, Storage } from "aws-amplify";
+import { API} from "aws-amplify";
 import { onError } from "../libs/errorLib";
 
-import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { FormGroup, FormControl } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 
 import "./Tasks.css";
@@ -11,7 +11,6 @@ import { Slider, Typography } from '@material-ui/core';
 
 
 export default function Tasks() {
-    const file = useRef(null);
     const { id } = useParams();
     const history = useHistory();
     const [task, setTask] = useState(null);
@@ -47,11 +46,6 @@ export default function Tasks() {
   function validateForm() {
     return content.length > 0;
   }
-  
-  function formatFilename(str) {
-    return str.replace(/^\w+-/, "");
-  }
-  
 
   function saveTask(task) {
     return API.put("tasks", `/tasks/${id}`, {

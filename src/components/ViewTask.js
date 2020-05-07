@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { API, Storage } from "aws-amplify";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { API } from "aws-amplify";
 import { onError } from "../libs/errorLib";
 
 import { makeStyles } from '@material-ui/core/styles';

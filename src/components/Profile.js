@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
+import { PageHeader } from "react-bootstrap";
 
 import { LinkContainer } from "react-router-bootstrap";
 
@@ -11,14 +11,9 @@ import { API, Auth } from "aws-amplify";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar'
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid'
 import { CardActionArea } from "@material-ui/core";
@@ -31,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   profile: {
     padding: 20,
     maxWidth: 350,
+    margin: 20,
     textAlign: 'center',
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -122,7 +118,6 @@ export default function Profile() {
     return [{}].concat(tasks).map((task, i) =>
       i !== 0 ? (
         <LinkContainer key={task.taskId} to={`/tasks/${task.taskId}/edit`}>
-          <GridListTile header={task.content.trim().split("\n")[0]} className={classes.tile}>
           <Card className={classes.profile}>
           <CardActionArea>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
@@ -142,20 +137,16 @@ export default function Profile() {
               </CardContent>
             </CardActionArea>
             </Card>
-
-            <br />
-
-          </GridListTile>
         </LinkContainer>
       ) : (
         <LinkContainer key="new" to="/tasks/new" >
-          <GridListTile className={classes.tile}>
-            <CardActionArea>
+
             <Card className={classes.profile}>
-              <b>{"\uFF0B"}</b> Create a new task
+              <CardActionArea>
+                <b>{"\uFF0B"}</b> Create a new task
+              </CardActionArea>
             </Card>
-            </CardActionArea>
-          </GridListTile>
+
         </LinkContainer>
       )
     );
@@ -198,9 +189,9 @@ export default function Profile() {
         </Grid> 
         <Grid Item xs >
           <PageHeader>Your Tasks</PageHeader>
-          <GridList className={classes.gridList} cols={2.5}>
+          <Grid container className={classes.root} spacing={2}>
             {!isLoading && renderTasksList(tasks)}
-          </GridList>
+          </Grid>
         </Grid>
       </Grid>
 

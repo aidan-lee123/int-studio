@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Glyphicon } from "react-bootstrap";
-import { FaSyncAlt } from 'react-icons/fa';
 import "./LoaderButton.css";
 
 export default function LoaderButton({
