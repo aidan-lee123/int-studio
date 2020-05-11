@@ -53,15 +53,22 @@ export default function ViewTask() {
     const classes = useStyles();
     const { id } = useParams();
     const [task, setTask] = useState(null);
+    const [user, setUser] = useState(null);
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
     const [points, setPoints] = useState();
     const [userId, setUserId] = useState("");
+    const [userName, setUserName] = useState("");
+    const [userDegree, setUserDegree] = useState("");
     
 
   useEffect(() => {
     function loadTask() {
       return API.get("tasks", `/tasks/${id}/view`);
+    }
+
+    function loadUser() {
+      return API.get("tasks",  `/tasks/${userId}/user`)
     }
 
     async function onLoad() {
@@ -74,6 +81,12 @@ export default function ViewTask() {
         setPoints(points);
         setUserId(userName);
 
+        //const user = await loadUser();
+        //const {name, degree} = user;
+
+
+
+        //setUser(user);
         setTask(task);
       } catch (e) {
         onError(e);

@@ -4,9 +4,14 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router } from 'react-router-dom';
-
-import { Amplify } from 'aws-amplify';
+import Amplify, { Auth } from "aws-amplify";
 import config from './config';
+import { ApolloProvider } from "react-apollo";
+import { Rehydrated } from "aws-appsync-react";
+import AppSyncConfig from "./aws-exports";
+import AWSAppSyncClient from "aws-appsync";
+
+Amplify.configure(AppSyncConfig);
 
 Amplify.configure({
   Auth: {
@@ -29,13 +34,32 @@ Amplify.configure({
         region: config.apiGateway.REGION
       },
     ]
+  },
+  AppSync: {
+    
   }
+});
+
+const client = new AWSAppSyncClient({
+  url: AppSyncConfig.aws_appsync_graphqlEndpoint,
+  region: AppSyncConfig.aws_appsync_region,
+  auth: {
+    type: AppSyncConfig.aws_appsync_authenticationType,
+    credentials: () => Auth.currentCredentials(),
+    jwtToken: async () =>
+      (await Auth.currentSession()).getAccessToken().getJwtToken()
+  },
+  complexObjectsCredentials: () => Auth.currentCredentials()
 });
 
 
 ReactDOM.render(
     <Router>
-      <App />
+      <ApolloProvider client={client}>
+        <Rehydrated> 
+          <App />
+        </Rehydrated>
+      </ApolloProvider>
     </Router>,
     document.getElementById('root')
   );

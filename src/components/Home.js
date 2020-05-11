@@ -63,84 +63,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
-  const [tasks, setTasks] = useState([]);
   const { isAuthenticated } = useAppContext();
-  const [isLoading, setIsLoading] = useState(true);
 
 
-  useEffect(() => {
-    async function onLoad() {
-      if (!isAuthenticated) {
-        return;
-      }
-  
-      try {
-        const tasks = await loadTasks();
-        console.log("LOADED TASKS");
-        setTasks(tasks);
-      } catch (e) {
-        onError(e);
-      }
-  
-      setIsLoading(false);
-    }
-  
-    onLoad();
-  }, [isAuthenticated]);
-  
-  function loadTasks() {
-
-    return API.get("tasks", "/tasks/all");
-    
-    
-  }
-
-  function loadUser(task){
-    return API.get("tasks", `/users/${task.userName}`)
-  }
-
-
-  function renderTasksList(tasks) {
-    
-    return [{}].concat(tasks).map((task, i) =>
-      i !== 0 ? (
-        <LinkContainer key={task.taskId} to={`/tasks/${task.taskId}/view`}>
-          <Card className={classes.profile}>
-          <CardActionArea>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
-
-              <CardContent>
-
-                <Typography gutterBottom variant="h4" component="h2">
-                  {task.title}
-                </Typography>
-
-                <Typography variant="body1" color="textSecondary" component="p">
-                  {"Created: " + new Date(task.createdAt).toLocaleString()} 
-                </Typography>
-
-                <Chip className={classes.points} label={"Points: " + task.points} />
-
-              </CardContent>
-            </CardActionArea>
-            </Card>
-
-        </LinkContainer>
-      ) : (
-        <LinkContainer key="new" to="/tasks/new">
-          <Card className={classes.profile}>
-            <CardActionArea>
-            <h4>
-              <b>{"\uFF0B"}</b> Create a new task
-            </h4>
-            </CardActionArea>
-          </Card>
-        </LinkContainer>
-      )
-    );
-  }
-
-  function renderLander() {
+  function renderLogin() {
     return (
       <div className="lander">
         <h1>Learn Together</h1>
@@ -157,20 +83,25 @@ export default function Home() {
   }
   
 
-  function renderTasks() {
+  function renderLander() {
     return (
-      <div className="tasks">
-        <PageHeader>All Tasks</PageHeader>
-        <Grid container className={classes.root} spacing={2}>
-          {!isLoading && renderTasksList(tasks)}
-        </Grid>
+      <div className="lander">
+        <h1>Learn Together</h1>
+        <div>
+          <Link to="/tasks" className="btn btn-info btn-lg">
+            Search Tasks
+          </Link>
+          <Link to="/tasks/new" className="btn btn-success btn-lg">
+            Create new Task
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="Home">
-      {isAuthenticated ? renderTasks() : renderLander()}
+      {isAuthenticated ? renderLander() : renderLogin()}
     </div>
   );
 }

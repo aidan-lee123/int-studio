@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "intStudioChat",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "false",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authintstudio474e7c58",
+            "Outputs.UserPoolId"
+        ]
+    }
+}
