@@ -56,6 +56,9 @@ export default () => {
           <Nav pullRight>
           {isAuthenticated ? (
               <>
+                <LinkContainer to="/messages">
+                  <NavItem>Messages</NavItem>
+                </LinkContainer>
                 <LinkContainer to="/profile">
                   <NavItem>Profile</NavItem>
                 </LinkContainer>

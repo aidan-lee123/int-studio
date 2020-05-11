@@ -55,7 +55,7 @@ export default () => {
                   <Button
                     style={{ flex: 1 }}
                     component={Link}
-                    to={`/room/${room.id}`}
+                    to={`/messages/${room.id}`}
                   >
                     <ListItemText
                       primary={room.id}

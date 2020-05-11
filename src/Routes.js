@@ -58,9 +58,9 @@ export default function Routes() {
           <Tasks />
         </Route>
 
-        <Route path="/room/:roomId" component={Chat} />
+        <Route path="/messages/:roomId" component={Chat} />
 
-        <Route exact path="/room">
+        <Route exact path="/messages">
           <Rooms />
         </Route>
 
