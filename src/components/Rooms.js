@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import gql from "graphql-tag";
 import uuid from "uuid/v4";
 import { Query, Mutation } from "react-apollo";
+import { FaPlus } from 'react-icons/fa';
 
 const LIST_ROOMS = gql`
   query ListRooms {
@@ -102,6 +103,7 @@ export default () => {
               });
             }}
           >
+          <FaPlus />
           </Fab>
         )}
       </Mutation>
