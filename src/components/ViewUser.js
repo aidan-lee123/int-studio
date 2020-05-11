@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { API } from "aws-amplify";
 import { onError } from "../libs/errorLib";
-import { Link } from "react-router-dom";
+import { useAppContext } from "../libs/contextLib";
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -51,54 +51,51 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ViewTask() {
     const classes = useStyles();
-    const { id } = useParams();
-    const [task, setTask] = useState(null);
+    const { userId } = useParams();
+    const { isAuthenticated } = useAppContext();
+    const [isLoading, setIsLoading] = useState(true);
+    const [tasks, setTasks] = useState(null);
     const [user, setUser] = useState(null);
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
     const [points, setPoints] = useState();
-    const [userId, setUserId] = useState("");
     const [userName, setUserName] = useState("");
     const [userDegree, setUserDegree] = useState("");
     
 
-  useEffect(() => {
-    function loadTask() {
-      return API.get("tasks", `/tasks/${id}/view`);
+useEffect(() => {
+    async function onLoad() {
+        if (!isAuthenticated) {
+        return;
+        }
+    
+        try {
+        const user = await loadUser();
+        const tasks = await loadTasks();
+        console.log("LOADED TASKS");
+        setTasks(tasks);
+        setUser(user);
+        } catch (e) {
+        onError(e);
+        }
+    
+        setIsLoading(false);
     }
+    
+    onLoad();
+    }, [isAuthenticated]);
+
+    function loadTasks() {
+        return API.get("tasks", `/tasks`);
+      }
 
     function loadUser() {
-      return API.get("tasks",  `/tasks/${userId}/user`)
-    }
-
-    async function onLoad() {
-      try {
-        const task = await loadTask();
-        const { content, title, points, userId, userName } = task;
-
-        setContent(content);
-        setTitle(title);
-        setPoints(points);
-        setUserId(userName);
-
-        //const user = await loadUser();
-        //const {name, degree} = user;
-
-
-
-        //setUser(user);
-        setTask(task);
-      } catch (e) {
-        onError(e);
+        return API.get("tasks",  `/tasks/${userId}/user`)
       }
-    }
-
-    onLoad();
-  }, [id]);
   
   return (
     <div>
-      {task && (
+      {tasks && (
       <Grid container className={classes.root} spacing={2} justify="center" alignItems="center">
         <Grid item xs>
           <Card className={classes.profile}>
@@ -118,13 +115,9 @@ export default function ViewTask() {
             </CardContent>
 
             <CardActions>
-            <Button
-                    style={{ flex: 1 }}
-                    component={Link}
-                    to={`/tasks/${userId}/user`}
-                  >
-                    Profile
-                  </Button>
+              <Button size="small" color="primary" className={classes.button}>
+                Profile
+              </Button>
             </CardActions>
           </Card>
         </Grid>
