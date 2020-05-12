@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PageHeader } from "react-bootstrap";
-
+import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 
 import { useAppContext } from "../libs/contextLib";
@@ -177,12 +177,15 @@ export default function Profile() {
                 {userDegree}
               </Typography>
 
-              <Typography variant="body1" color="textSecondary" component="p">
+              <Typography variant="h5" color="textSecondary" component="p">
                 {userBio}
               </Typography>
 
               <Chip className={classes.points} label={"Points: " + userPoints} />
 
+              <Link to="/profile/edit" className="btn btn-info btn-lg">
+                Edit Profile
+              </Link>
             </CardContent>
 
           </Card>

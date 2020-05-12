@@ -4,13 +4,13 @@ import { API } from "aws-amplify";
 import { onError } from "../libs/errorLib";
 import { useAppContext } from "../libs/contextLib";
 import { makeStyles } from '@material-ui/core/styles';
+import { LinkContainer } from "react-router-bootstrap";
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
+import { CardActionArea } from "@material-ui/core";
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 
@@ -91,9 +91,47 @@ useEffect(() => {
     onLoad();
     }, [isAuthenticated]);
 
-    function loadTasks() {
-        return API.get("tasks", `/tasks/${userId}/user/tasks`);
-      }
+  function loadTasks() {
+      return API.get("tasks", `/tasks/${userId}/user/tasks`);
+    }
+
+  function renderTasksList(tasks) {
+    return [{}].concat(tasks).map((task, i) =>
+      i !== 0 ? (
+        <LinkContainer key={task.taskId} to={`/tasks/${task.taskId}/view`}>
+          <Card className={classes.profile}>
+          <CardActionArea>
+            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
+
+              <CardContent>
+
+                <Typography gutterBottom variant="h4" component="h2">
+                  {task.title}
+                </Typography>
+
+                <Typography variant="body1" color="textSecondary" component="p">
+                  {"Created: " + new Date(task.createdAt).toLocaleString()} 
+                </Typography>
+
+                <Chip className={classes.points} label={"Points: " + task.points} />
+
+              </CardContent>
+            </CardActionArea>
+            </Card>
+        </LinkContainer>
+      ) : (
+        <LinkContainer key="new" to="/tasks/new" >
+
+            <Card className={classes.profile}>
+              <CardActionArea>
+                <b>{"\uFF0B"}</b> Create a new task
+              </CardActionArea>
+            </Card>
+
+        </LinkContainer>
+      )
+    );
+  }
   
   return (
     <div>
@@ -123,19 +161,9 @@ useEffect(() => {
 
         
         <Grid item xs>
-          <Container className={classes.task}>
-
-            <Typography gutterBottom variant="h1" component="h2">
-              {title}
-            </Typography>
-
-            <Typography variant="body" color="textSecondary" component="p">
-              {content}
-            </Typography>
-
-            <Chip className={classes.points} label={"Points: " + points} />
-
-          </Container>
+        <Grid container className={classes.root} spacing={2}>
+            {!isLoading && renderTasksList(tasks)}
+          </Grid>
         </Grid>
 
       </Grid>

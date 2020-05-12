@@ -32,7 +32,7 @@ export default function NewTask() {
     try {
   
       await createTask({ content, title, points });
-      history.push("/");
+      history.push("/tasks");
     } catch (e) {
       onError(e);
       setIsLoading(false);

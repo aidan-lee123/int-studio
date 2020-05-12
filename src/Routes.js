@@ -18,6 +18,7 @@ import Chat from "./components/ChatWithData";
 import Rooms from './components/Rooms';
 
 import ViewUser from "./components/ViewUser";
+import EditProfile from "./components/EditProfile";
 
 
 export default function Routes() {
@@ -61,6 +62,10 @@ export default function Routes() {
 
         <Route exact path="/tasks/:userId/user">
             <ViewUser />
+        </Route>
+
+        <Route exact path="/profile/edit">
+            <EditProfile />
         </Route>
 
         <Route path="/messages/:roomId" component={Chat} />

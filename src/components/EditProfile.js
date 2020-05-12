@@ -1,105 +1,68 @@
-import React, { useState, useEffect } from "react";
-import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
-
-import { LinkContainer } from "react-router-bootstrap";
-
+import React, { useState} from "react";
+import { useHistory } from "react-router-dom";
+import { FormGroup, FormControl } from "react-bootstrap";
+import LoaderButton from "../components/LoaderButton";
 import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
-import "./Home.css";
-import { API, Auth } from "aws-amplify";
+import "./Profile.css";
+import { Auth } from "aws-amplify";
 
 
 
 export default function EditProfile() {
-  const [tasks, setTasks] = useState([]);
+  const history = useHistory();
   const { isAuthenticated } = useAppContext();
-  const [isLoading, setIsLoading] = useState(true);
-  const [userInfo, setUserInfo] = useState();
+  const [bio, setBio] = useState("");
 
-
-  async function getUserInfo() {
-
+  function validateForm() {
+    return (
+      bio.length 
+      );
   }
-  useEffect(() => {
-    async function onLoad() {
-      if (!isAuthenticated) {
-        return;
-      }
+  async function handleSubmit(event) {
+    event.preventDefault();
   
-      try {
-        const tasks = await loadTasks();
-        console.log("LOADED TASKS");
-        setTasks(tasks);
-      } catch (e) {
-        onError(e);
-      }
   
-      setIsLoading(false);
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      const resule = await Auth.updateUserAttributes(user, {
+        'custom:bio': bio
+      })
+      history.push('/profile');
+    } catch (e) {
+      onError(e);
     }
+  }
   
-    onLoad();
-  }, [isAuthenticated]);
-  
-  function loadTasks() {
-    getUserName();
-    return API.get("tasks", "/tasks");
-    
-    
-  }
-
-  //This is the current user name lol
-  async function getUserName() {
-    const currentUserInfo = await Auth.currentUserInfo()
-    const userNameTemp = currentUserInfo.attributes['name']
-    setUserInfo(userNameTemp);
-  }
-
-
-  function renderTasksList(tasks) {
-    return [{}].concat(tasks).map((task, i) =>
-      i !== 0 ? (
-        <LinkContainer key={task.taskId} to={`/tasks/${task.taskId}`}>
-          <ListGroupItem header={task.content.trim().split("\n")[0]}>
-            {"Created: " + new Date(task.createdAt).toLocaleString()} 
-            <br />
-            {"User: " + userInfo}
-          </ListGroupItem>
-        </LinkContainer>
-      ) : (
-        <LinkContainer key="new" to="/tasks/new">
-          <ListGroupItem>
-            <h4>
-              <b>{"\uFF0B"}</b> Create a new task
-            </h4>
-          </ListGroupItem>
-        </LinkContainer>
-      )
-    );
-  }
-
-  function renderLander() {
+  function renderBioForm() {
     return (
-      <div className="lander">
-        <h1>Scratch</h1>
-        <p>A simple note taking app</p>
-      </div>
-    );
-  }
-
-  function renderTasks() {
-    return (
-      <div className="tasks">
-        <PageHeader>Your Tasks</PageHeader>
-        <ListGroup>
-          {!isLoading && renderTasksList(tasks)}
-        </ListGroup>
+      <div className="EditProfile">
+        <form onSubmit={handleSubmit}>
+          <FormGroup controlId="bio">
+            <FormControl
+              placeholder="Enter new bio"
+              value={bio}
+              componentClass="textarea"
+              onChange={e => setBio(e.target.value)}
+            />
+          </FormGroup>
+          <LoaderButton
+            block
+            type="submit"
+            bsSize="large"
+            bsStyle="primary"
+            disabled={!validateForm()}
+          >
+            Create
+          </LoaderButton>
+        </form>
       </div>
     );
   }
 
   return (
     <div className="Home">
-      {isAuthenticated ? renderTasks() : renderLander()}
+      {renderBioForm()}
     </div>
   );
 }

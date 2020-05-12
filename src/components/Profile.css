@@ -5,11 +5,16 @@
   }
   
   /* On mouse-over, add a deeper shadow */
-  .card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  }
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
   
   /* Add some padding inside the card container */
-  .container {
-    padding: 2px 16px;
-  }
+.container {
+  padding: 2px 16px;
+}
+
+.EditProfile form textarea {
+  height: 300px;
+  font-size: 24px;
+}

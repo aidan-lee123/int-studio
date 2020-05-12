@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../libs/contextLib";
 import "./Home.css";
-import { makeStyles } from '@material-ui/core/styles';
+
 
 
 export default function Home() {
