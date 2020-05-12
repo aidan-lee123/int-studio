@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PageHeader } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 
 import { useAppContext } from "../libs/contextLib";
@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
+  const { search } = useParams();
   const [tasks, setTasks] = useState([]);
   const { isAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
@@ -92,6 +93,12 @@ export default function Home() {
     return API.get("tasks", "/tasks/all");
   }
 
+  function loadUser(task){
+    const user = API.get("tasks", `/users/${task.userName}`).then((res) => {return res});
+    return user;
+  }
+
+
   function renderTasksList(tasks) {
     return [{}].concat(tasks).map((task, i) =>
       i !== 0 ? (
@@ -100,6 +107,7 @@ export default function Home() {
           <CardActionArea>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
               <CardContent>
+                  {console.log(loadUser(task))}
                 <Typography gutterBottom variant="h4" component="h2">
                   {task.title}
                 </Typography>

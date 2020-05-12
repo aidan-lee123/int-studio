@@ -16,6 +16,7 @@ import Grid from '@material-ui/core/Grid';
 
 
 import "./ViewTask.css";
+import { CognitoAccessToken } from "amazon-cognito-identity-js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,8 +59,9 @@ export default function ViewTask() {
     const [title, setTitle] = useState("");
     const [points, setPoints] = useState();
     const [userId, setUserId] = useState("");
-    const [userName, setUserName] = useState("");
-    const [userDegree, setUserDegree] = useState("");
+
+    const [degree, setDegree] = useState("");
+    const [name, setName] = useState("");
     
 
   useEffect(() => {
@@ -67,27 +69,27 @@ export default function ViewTask() {
       return API.get("tasks", `/tasks/${id}/view`);
     }
 
-    function loadUser() {
-      return API.get("tasks",  `/tasks/${userId}/user`)
-    }
-
     async function onLoad() {
       try {
         const task = await loadTask();
-        const { content, title, points, userId, userName } = task;
+
+        const { content, title, points, userName } = task;
 
         setContent(content);
         setTitle(title);
         setPoints(points);
         setUserId(userName);
+        console.log(userName)
 
-        //const user = await loadUser();
+        const user = await API.get("tasks",  `/tasks/${userName}/user`)
         //const {name, degree} = user;
-
-
-
-        //setUser(user);
+        console.log(user);
+        setUser(user);
         setTask(task);
+
+        setName(user[2].Value);
+        setDegree(user[3].Value);
+
       } catch (e) {
         onError(e);
       }
@@ -104,15 +106,14 @@ export default function ViewTask() {
           <Card className={classes.profile}>
 
             <Avatar alt={userId} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
-            {userId}
             <CardContent>
 
               <Typography gutterBottom variant="h4" component="h2">
-                User Name
+                {name}
               </Typography>
 
               <Typography variant="body1" color="textSecondary" component="p">
-                User Bio
+                {degree}
               </Typography>
 
             </CardContent>

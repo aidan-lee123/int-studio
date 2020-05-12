@@ -59,8 +59,8 @@ export default function ViewTask() {
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
     const [points, setPoints] = useState();
-    const [userName, setUserName] = useState("");
-    const [userDegree, setUserDegree] = useState("");
+    const [name, setName] = useState("");
+    const [degree, setDegree] = useState("");
     
 
 useEffect(() => {
@@ -70,11 +70,17 @@ useEffect(() => {
         }
     
         try {
-        const user = await loadUser();
+        const user = await API.get("tasks",  `/tasks/${userId}/user`)
         const tasks = await loadTasks();
         console.log("LOADED TASKS");
+        console.log(user);
         setTasks(tasks);
         setUser(user);
+
+        setName(user[2].Value);
+        setDegree(user[3].Value);
+        setPoints(user[4].Value);
+
         } catch (e) {
         onError(e);
         }
@@ -86,11 +92,7 @@ useEffect(() => {
     }, [isAuthenticated]);
 
     function loadTasks() {
-        return API.get("tasks", `/tasks`);
-      }
-
-    function loadUser() {
-        return API.get("tasks",  `/tasks/${userId}/user`)
+        return API.get("tasks", `/tasks/${userId}/user/tasks`);
       }
   
   return (
@@ -100,25 +102,22 @@ useEffect(() => {
         <Grid item xs>
           <Card className={classes.profile}>
 
-            <Avatar alt={userId} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
-            {userId}
+            <Avatar alt={name} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
+
             <CardContent>
 
               <Typography gutterBottom variant="h4" component="h2">
-                User Name
+                {name}
               </Typography>
 
               <Typography variant="body1" color="textSecondary" component="p">
-                User Bio
+                {degree}
               </Typography>
+
+              <Chip className={classes.points} label={"Points: " + points} />
 
             </CardContent>
 
-            <CardActions>
-              <Button size="small" color="primary" className={classes.button}>
-                Profile
-              </Button>
-            </CardActions>
           </Card>
         </Grid>
 
