@@ -58,9 +58,12 @@ export default function ViewTask() {
     const [user, setUser] = useState(null);
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
-    const [points, setPoints] = useState();
+
+
     const [name, setName] = useState("");
     const [degree, setDegree] = useState("");
+    const [bio, setBio] = useState("");
+    const [points, setPoints] = useState();
     
 
 useEffect(() => {
@@ -77,9 +80,17 @@ useEffect(() => {
         setTasks(tasks);
         setUser(user);
 
-        setName(user[2].Value);
-        setDegree(user[3].Value);
-        setPoints(user[4].Value);
+        var i;
+        for(i=0; i < 7; i++){
+          if(user[i].Name == "name")
+            setName(user[i].Value);
+          else if(user[i].Name == "custom:degree")
+            setDegree(user[i].Value)
+          else if(user[i].Name == "custom:bio")
+            setBio(user[i].Value);
+          else if(user[i].Name == "custom:points")
+            setPoints(user[i].Value);
+        }
 
         } catch (e) {
         onError(e);
@@ -152,6 +163,9 @@ useEffect(() => {
                 {degree}
               </Typography>
 
+              <Typography variant="h5" color="textSecondary" component="p">
+                {bio}
+              </Typography>
               <Chip className={classes.points} label={"Points: " + points} />
 
             </CardContent>
@@ -161,7 +175,7 @@ useEffect(() => {
 
         
         <Grid item xs>
-        <Grid container className={classes.root} spacing={2}>
+          <Grid container className={classes.root} spacing={2}>
             {!isLoading && renderTasksList(tasks)}
           </Grid>
         </Grid>

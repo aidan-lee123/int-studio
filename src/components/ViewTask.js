@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { API } from "aws-amplify";
+import { API, sectionBody } from "aws-amplify";
 import { onError } from "../libs/errorLib";
 import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
@@ -62,7 +62,7 @@ export default function ViewTask() {
 
     const [degree, setDegree] = useState("");
     const [name, setName] = useState("");
-    
+    const [bio, setBio] = useState("");
 
   useEffect(() => {
     function loadTask() {
@@ -86,9 +86,17 @@ export default function ViewTask() {
         console.log(user);
         setUser(user);
         setTask(task);
+        
+        var i;
+        for(i=0; i < 7; i++){
+          if(user[i].Name == "name")
+            setName(user[i].Value);
+          else if(user[i].Name == "custom:degree")
+            setDegree(user[i].Value)
+          else if(user[i].Name == "custom:bio")
+            setBio(user[i].Value)
+        }
 
-        setName(user[2].Value);
-        setDegree(user[3].Value);
 
       } catch (e) {
         onError(e);
@@ -114,6 +122,10 @@ export default function ViewTask() {
 
               <Typography variant="body1" color="textSecondary" component="p">
                 {degree}
+              </Typography>
+
+              <Typography variant="h5" color="textSecondary" component="p">
+                {bio}
               </Typography>
 
             </CardContent>

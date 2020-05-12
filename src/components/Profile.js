@@ -182,7 +182,7 @@ export default function Profile() {
               </Typography>
 
               <Chip className={classes.points} label={"Points: " + userPoints} />
-
+              <br />
               <Link to="/profile/edit" className="btn btn-info btn-lg">
                 Edit Profile
               </Link>
