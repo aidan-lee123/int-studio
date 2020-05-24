@@ -22,44 +22,74 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     minHeight: 500,
+
   },
   profile: {
-    padding: 20,
+    padding: theme.spacing(2),
+    height: '100%',
     maxWidth: 350,
-    margin: 20,
+    minWidth: 300,
     textAlign: 'center',
     marginLeft: 'auto',
     marginRight: 'auto',
-    
+    borderRadius: 0,
+    height: 400,
+    position: 'relative',
+    marginTop: 50,
+  },
+  card: {
+    padding: theme.spacing(2),
+    backgroundColor: '#7fc4fd',
+    height: '100%',
+    maxWidth: 350,
+    minWidth: 300,
+    textAlign: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    borderRadius: 0,
+    height: 400,
+    position: 'relative',
+    marginTop: 10,
   },
   task: {
-    textAlign: 'center',
+    width: 800,
+    height: 400,
+  },
+  avatar: {
+    marginTop: 40,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  name: {
+    marginTop: 10,
+  },
+  degree: {
+    marginTop: 10,
+  },
+  bio: {
+    marginTop: 30,
+  },
+  title: {
 
+    top: 10,
+    color: '#2699fb',
+  },
+  content: {
+    color: '#2699fb',
+
+    top: 100,
   },
   points: {
     margin: '10px',
     fontSize: 12,
-  },
-  avatar: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
+
+    bottom: 10,
+    left: '45%',
   },
   button: {
     marginLeft: 'auto',
     marginRight: 'auto',
-  },  
-  gridList: {
-    minHeight: 400,
-    flexWrap: 'nowrap',
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-    transform: 'translateZ(0)',
   },
-  tile: {
-    marginTop: 'auto',
-    marginBottom: 'auto',
-    background:
-    'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-  }
 }));
 
 export default function Profile() {
@@ -117,9 +147,9 @@ export default function Profile() {
   function renderTasksList(tasks) {
     return [{}].concat(tasks).map((task, i) =>
       i !== 0 ? (
-        <LinkContainer key={task.taskId} to={`/tasks/${task.taskId}/edit`}>
-          <Card className={classes.profile}>
-          <CardActionArea>
+
+          <Card className={classes.card}>
+
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
 
               <CardContent>
@@ -134,14 +164,16 @@ export default function Profile() {
 
                 <Chip className={classes.points} label={"Points: " + task.points} />
 
+                <Link to={`/tasks/${task.taskId}/view`} className="btn btn-info btn-lg viewTask">
+                  <b>view task</b>
+                </Link>
               </CardContent>
-            </CardActionArea>
+
             </Card>
-        </LinkContainer>
       ) : (
         <LinkContainer key="new" to="/tasks/new" >
 
-            <Card className={classes.profile}>
+            <Card className={classes.card}>
               <CardActionArea>
                 <b>{"\uFF0B"}</b> Create a new task
               </CardActionArea>
@@ -162,36 +194,33 @@ export default function Profile() {
 
   function renderTasks() {
     return (
-      <Grid container className={classes.root} spacing={2} justify="center" alignItems="center">
+      <Grid container className={classes.root} spacing={2} justify="center" alignItems="center" >
         <Grid item xs>
           <Card className={classes.profile}>
 
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
+            <Avatar alt={userName} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
             <CardContent>
 
-              <Typography gutterBottom variant="h4" component="h2">
+              <Typography gutterBottom variant="h4" component="h2" className={classes.name}>
                 {userName}
               </Typography>
 
-              <Typography gutterBottom variant="h5" component="h2">
+              <Typography variant="body1" color="textSecondary" component="p" className={classes.degree}>
                 {userDegree}
               </Typography>
 
-              <Typography variant="h5" color="textSecondary" component="p">
+              <Typography variant="h5" color="textSecondary" component="p" className={classes.bio}>
                 {userBio}
               </Typography>
 
-              <Chip className={classes.points} label={"Points: " + userPoints} />
-              <br />
-              <Link to="/profile/edit" className="btn btn-info btn-lg">
-                Edit Profile
-              </Link>
             </CardContent>
 
           </Card>
-        </Grid> 
+        </Grid>
         <Grid Item xs >
-          <PageHeader>Your Tasks</PageHeader>
+          <Typography variant="h3" style={{color: "white", padding: 50}}
+          >Your Tasks
+          </Typography>
           <Grid container className={classes.root} spacing={2}>
             {!isLoading && renderTasksList(tasks)}
           </Grid>

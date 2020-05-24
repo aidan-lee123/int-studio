@@ -5,8 +5,10 @@ import { onError } from "../libs/errorLib";
 import { useAppContext } from "../libs/contextLib";
 import { makeStyles } from '@material-ui/core/styles';
 import { LinkContainer } from "react-router-bootstrap";
+import { Link } from "react-router-dom";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -21,27 +23,69 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     minHeight: 500,
+    paddingTop: 200,
   },
   profile: {
     padding: theme.spacing(2),
     height: '100%',
     maxWidth: 350,
+    minWidth: 300,
     textAlign: 'center',
     marginLeft: 'auto',
     marginRight: 'auto',
-    
+    borderRadius: 0,
+    height: 400,
+    position: 'relative',
+    marginTop: 10,
+  },
+  card: {
+    padding: theme.spacing(2),
+    backgroundColor: '#7fc4fd',
+    height: '100%',
+    maxWidth: 350,
+    minWidth: 300,
+    textAlign: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    borderRadius: 0,
+    height: 400,
+    position: 'relative',
+    marginTop: 10,
   },
   task: {
-    textAlign: 'center',
+    width: 800,
+    height: 400,
+  },
+  avatar: {
+    marginTop: 40,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  name: {
+    marginTop: 10,
+  },
+  degree: {
+    marginTop: 10,
+  },
+  bio: {
+    marginTop: 30,
+  },
+  title: {
 
+    top: 10,
+    color: '#2699fb',
+  },
+  content: {
+    color: '#2699fb',
+
+    top: 100,
   },
   points: {
     margin: '10px',
     fontSize: 12,
-  },
-  avatar: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
+
+    bottom: 10,
+    left: '45%',
   },
   button: {
     marginLeft: 'auto',
@@ -109,9 +153,9 @@ useEffect(() => {
   function renderTasksList(tasks) {
     return [{}].concat(tasks).map((task, i) =>
       i !== 0 ? (
-        <LinkContainer key={task.taskId} to={`/tasks/${task.taskId}/view`}>
-          <Card className={classes.profile}>
-          <CardActionArea>
+
+          <Card className={classes.card}>
+
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
 
               <CardContent>
@@ -126,14 +170,16 @@ useEffect(() => {
 
                 <Chip className={classes.points} label={"Points: " + task.points} />
 
+                <Link to={`/tasks/${task.taskId}/view`} className="btn btn-info btn-lg viewTask">
+                  <b>view task</b>
+                </Link>
               </CardContent>
-            </CardActionArea>
+
             </Card>
-        </LinkContainer>
       ) : (
         <LinkContainer key="new" to="/tasks/new" >
 
-            <Card className={classes.profile}>
+            <Card className={classes.card}>
               <CardActionArea>
                 <b>{"\uFF0B"}</b> Create a new task
               </CardActionArea>
@@ -147,35 +193,42 @@ useEffect(() => {
   return (
     <div>
       {tasks && (
-      <Grid container className={classes.root} spacing={2} justify="center" alignItems="center">
-        <Grid item xs>
-          <Card className={classes.profile}>
+      <Grid container className={classes.root} spacing={2} justify="center" alignItems="center" >
+      <Grid item xs>
+        <Card className={classes.profile}>
 
-            <Avatar alt={name} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
+          <Avatar alt={name} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
+          <CardContent>
 
-            <CardContent>
+            <Typography gutterBottom variant="h4" component="h2" className={classes.name}>
+              {name}
+            </Typography>
 
-              <Typography gutterBottom variant="h4" component="h2">
-                {name}
-              </Typography>
+            <Typography variant="body1" color="textSecondary" component="p" className={classes.degree}>
+              {degree}
+            </Typography>
 
-              <Typography variant="body1" color="textSecondary" component="p">
-                {degree}
-              </Typography>
+            <Typography variant="h5" color="textSecondary" component="p" className={classes.bio}>
+              {bio}
+            </Typography>
 
-              <Typography variant="h5" color="textSecondary" component="p">
-                {bio}
-              </Typography>
-              <Chip className={classes.points} label={"Points: " + points} />
+          </CardContent>
 
-            </CardContent>
-
-          </Card>
-        </Grid>
+          <CardActions>
+          <Button
+                  style={{ flex: 1 }}
+                  component={Link}
+                  to={`/tasks/${userId}/user`}
+                >
+                  Profile
+                </Button>
+          </CardActions>
+        </Card>
+      </Grid>
 
         
         <Grid item xs>
-          <Grid container className={classes.root} spacing={2}>
+          <Grid container className={classes.task} spacing={2}>
             {!isLoading && renderTasksList(tasks)}
           </Grid>
         </Grid>

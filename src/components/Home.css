@@ -36,3 +36,13 @@
   margin-right: 20px;
 }
 
+.Home .viewTasks {
+  background-color: #1878da;
+  border-color: #1878da;
+}
+
+.Home .newTask {
+  background-color: #0b0c16;
+  border-color: #f1f9ff;
+  color: #1878da;
+}

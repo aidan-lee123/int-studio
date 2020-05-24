@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../libs/contextLib";
+import Logo from "../images/logo.png";
 import "./Home.css";
 
 
@@ -29,13 +30,13 @@ export default function Home() {
   function renderLander() {
     return (
       <div className="lander">
-        <h1>Teachother</h1>
+        <img src={Logo}/>
         <div>
-          <Link to="/tasks" className="btn btn-info btn-lg">
-            Search Tasks
+          <Link to="/tasks/new" className="btn btn-info btn-lg viewTasks">
+            <b>POST A TASK</b>
           </Link>
-          <Link to="/tasks/new" className="btn btn-success btn-lg">
-            Create new Task
+          <Link to="/tasks" className="btn btn-success btn-lg newTask">
+            <b>SEARCH TASKS</b>
           </Link>
         </div>
       </div>

@@ -53,6 +53,9 @@ export default function NewTask() {
   return (
     <div className="NewTask">
       <form onSubmit={handleSubmit}>
+      <Typography variant='h4' style={{color: 'white'}}>
+        Task Header
+      </Typography>
       <FormGroup controlId="title">
           <FormControl
             placeholder="Enter Title"
@@ -62,6 +65,9 @@ export default function NewTask() {
           />
         </FormGroup>
 
+        <Typography variant='h4' style={{color: 'white'}}>
+          Task Description
+        </Typography>
         <FormGroup controlId="content">
           <FormControl
             placeholder="Enter Description"
@@ -71,7 +77,7 @@ export default function NewTask() {
           />
         </FormGroup>
         
-        <Typography id="range-slider" gutterBottom>
+        <Typography id="range-slider" gutterBottom variant='h4' style={{color: 'white'}}>
           Points 
         </Typography>
 

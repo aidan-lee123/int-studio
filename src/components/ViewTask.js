@@ -16,12 +16,13 @@ import Grid from '@material-ui/core/Grid';
 
 
 import "./ViewTask.css";
-import { CognitoAccessToken } from "amazon-cognito-identity-js";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     minHeight: 500,
+    paddingTop: 200,
   },
   profile: {
     padding: theme.spacing(2),
@@ -30,19 +31,45 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     marginLeft: 'auto',
     marginRight: 'auto',
+    borderRadius: 0,
+    height: 400,
     
   },
   task: {
-    textAlign: 'center',
-
+    textAlign: 'left',
+    position: 'relative',
+    height: 400,
+  },
+  avatar: {
+    marginTop: 40,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  name: {
+    marginTop: 10,
+  },
+  degree: {
+    marginTop: 10,
+  },
+  bio: {
+    marginTop: 30,
+  },
+  title: {
+    position: 'absolute',
+    top: 10,
+    color: '#2699fb',
+  },
+  content: {
+    color: '#2699fb',
+    position: 'absolute',
+    top: 100,
   },
   points: {
     margin: '10px',
     fontSize: 12,
-  },
-  avatar: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    position: 'absolute',
+    bottom: 10,
+    left: '45%',
   },
   button: {
     marginLeft: 'auto',
@@ -109,22 +136,22 @@ export default function ViewTask() {
   return (
     <div>
       {task && (
-      <Grid container className={classes.root} spacing={2} justify="center" alignItems="center">
+      <Grid container className={classes.root} spacing={2} justify="center" alignItems="center" >
         <Grid item xs>
           <Card className={classes.profile}>
 
-            <Avatar alt={userId} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
+            <Avatar alt={name} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
             <CardContent>
 
-              <Typography gutterBottom variant="h4" component="h2">
+              <Typography gutterBottom variant="h4" component="h2" className={classes.name}>
                 {name}
               </Typography>
 
-              <Typography variant="body1" color="textSecondary" component="p">
+              <Typography variant="body1" color="textSecondary" component="p" className={classes.degree}>
                 {degree}
               </Typography>
 
-              <Typography variant="h5" color="textSecondary" component="p">
+              <Typography variant="h5" color="textSecondary" component="p" className={classes.bio}>
                 {bio}
               </Typography>
 
@@ -146,11 +173,11 @@ export default function ViewTask() {
         <Grid item xs>
           <Container className={classes.task}>
 
-            <Typography gutterBottom variant="h1" component="h2">
+            <Typography gutterBottom variant="h2" component="h2" className={classes.title}>
               {title}
             </Typography>
 
-            <Typography variant="body" color="textSecondary" component="p">
+            <Typography variant="body" color="textSecondary" component="p" className={classes.content}>
               {content}
             </Typography>
 

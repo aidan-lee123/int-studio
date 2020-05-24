@@ -8,8 +8,6 @@ import { LinkContainer } from "react-router-bootstrap";
 import Routes from "./Routes";
 import { onError } from "./libs/errorLib";
 
-
-
 export default () => {
   const history = useHistory();
   const [isAuthenticating, setIsAuthenticating] = useState(true);
@@ -45,8 +43,8 @@ export default () => {
   return (
     !isAuthenticating &&
     <div className="container">
-      <Navbar fluid collapseOnSelect staticTop>
-        <Navbar.Header>
+      <Navbar fluid collapseOnSelect staticTop bsStyle="default" style={{backgroundColor: "#0b0c16", borderColor: "#0b0c16"}}>
+        <Navbar.Header >
           <Navbar.Brand>
             <Link to="/">Learn Together</Link>
           </Navbar.Brand>

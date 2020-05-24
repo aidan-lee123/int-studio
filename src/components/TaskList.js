@@ -5,7 +5,7 @@ import { LinkContainer } from "react-router-bootstrap";
 
 import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
-import "./Home.css";
+import "./TaskList.css";
 import { API } from "aws-amplify";
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,14 +21,19 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     minHeight: 500,
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
-  profile: {
+  card: {
     padding: theme.spacing(2),
-    margin: 20,
+    margin: 10,
     maxWidth: 350,
     textAlign: 'center',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    marginLeft: '10',
+    marginRight: '10',
+    backgroundColor: '#7fc4fd',
+    borderRadius: '0',
+    position: 'relative',
     
   },
   task: {
@@ -58,7 +63,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 'auto',
     background:
     'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-  }
+  },
+
 }));
 
 export default function Home() {
@@ -95,13 +101,16 @@ export default function Home() {
   function renderTasksList(tasks) {
     return [{}].concat(tasks).map((task, i) =>
       i !== 0 ? (
-        <LinkContainer key={task.taskId} to={`/tasks/${task.taskId}/view`}>
-          <Card className={classes.profile}>
-          <CardActionArea>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
+
+          <Card className={classes.card}>
+
               <CardContent>
-                <Typography gutterBottom variant="h4" component="h2">
-                  {task.title}
+                <Typography gutterBottom variant="h4" component="h2" className="title">
+                  <b>{task.title}</b>
+                </Typography>
+
+                <Typography gutterBottom variant="h5" component="h2">
+                  {task.content}
                 </Typography>
 
                 <Typography variant="body1" color="textSecondary" component="p">
@@ -110,14 +119,18 @@ export default function Home() {
 
                 <Chip className={classes.points} label={"Points: " + task.points} />
 
+                <Link to={`/tasks/${task.taskId}/view`} className="btn btn-info btn-lg viewTask">
+                  <b>view task</b>
+                </Link>
               </CardContent>
-            </CardActionArea>
+
+
             </Card>
 
-        </LinkContainer>
+
       ) : (
         <LinkContainer key="new" to="/tasks/new">
-          <Card className={classes.profile}>
+          <Card className={classes.card}>
             <CardActionArea>
             <h4>
               <b>{"\uFF0B"}</b> Create a new task
@@ -148,8 +161,8 @@ export default function Home() {
 
   function renderTasks() {
     return (
-      <div className="tasks">
-        <PageHeader>All Tasks</PageHeader>
+      <div className="tasks" style={{width: '100%'}}>
+        <PageHeader style={{backgroundColor: "#0b0c16", borderColor: "#0b0c16", color: 'white', marginLeft: 'auto', marginRight: 'auto'}}>All Tasks</PageHeader>
         <Grid container className={classes.root} spacing={2}>
           {!isLoading && renderTasksList(tasks)}
         </Grid>
