@@ -3,14 +3,6 @@
     margin-right: auto;
 }
 
-.viewTask {
-    position: absolute;
-    background-color: #1878da;
-    border-color: #1878da;
-    bottom: 10px;
-    left: 35%;
-}
-
 .title{
     padding-bottom: 40px;
 }

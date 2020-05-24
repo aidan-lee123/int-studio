@@ -27,7 +27,9 @@ const useStyles = makeStyles((theme) => ({
   card: {
     padding: theme.spacing(2),
     margin: 10,
+    minWidth: 300,
     maxWidth: 350,
+    minHeight: 400,
     textAlign: 'center',
     marginLeft: '10',
     marginRight: '10',
@@ -63,6 +65,18 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 'auto',
     background:
     'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+  },
+  viewButton: {
+    position: 'absolute',
+    backgroundColor: '#1878da',
+    borderColor: '#1878da',
+    bottom: '10px',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    fontSize: '18px',
+    color: 'white',
+    borderRadius: '5px',
+    padding: '5px',
   },
 
 }));
@@ -119,7 +133,7 @@ export default function Home() {
 
                 <Chip className={classes.points} label={"Points: " + task.points} />
 
-                <Link to={`/tasks/${task.taskId}/view`} className="btn btn-info btn-lg viewTask">
+                <Link to={`/tasks/${task.taskId}/view`} className={classes.viewButton}>
                   <b>view task</b>
                 </Link>
               </CardContent>
