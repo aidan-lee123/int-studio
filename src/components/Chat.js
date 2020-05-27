@@ -41,7 +41,7 @@ class Chat extends React.Component {
 const styles = {
   container: {
     flex: 1,
-    height: "100vh"
+    height: "75vh"
   }
 };
 

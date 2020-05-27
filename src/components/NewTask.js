@@ -6,7 +6,7 @@ import { onError } from "../libs/errorLib";
 import "./NewTask.css";
 import { API } from "aws-amplify";
 import { Slider, Typography } from '@material-ui/core';
-import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 import Grid from '@material-ui/core/Grid';
 
@@ -91,9 +91,9 @@ export default function NewTask() {
                 Availability
               </Typography>
                 <MuiPickersUtilsProvider utils={DateFnsUtils} >
-                  <DatePicker
+                  <DateTimePicker
                   autoOk
-                  orientation="landscape"
+                  disablePast
                   variant="static"
                   openTo="date"
                   value={selectedDate}

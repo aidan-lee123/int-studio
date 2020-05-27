@@ -41,10 +41,10 @@ Amplify.configure({
 });
 
 const client = new AWSAppSyncClient({
-  url: AppSyncConfig.aws_appsync_graphqlEndpoint,
-  region: AppSyncConfig.aws_appsync_region,
+  url: "https://s2gy3jxkqfhehmewutajksjcam.appsync-api.ap-southeast-2.amazonaws.com/graphql",
+  region: "ap-southeast-2",
   auth: {
-    type: AppSyncConfig.aws_appsync_authenticationType,
+    type: "AMAZON_COGNITO_USER_POOLS",
     credentials: () => Auth.currentCredentials(),
     jwtToken: async () =>
       (await Auth.currentSession()).getAccessToken().getJwtToken()

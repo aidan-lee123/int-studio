@@ -38,6 +38,13 @@ const CREATE_ROOM = gql`
 `;
 
 export default () => {
+
+
+  /* THIS IS FOR TOMORROW AIDAN
+    Maybe make it so that you split the name and then just display the room if it matches, after that grab the other id and fetch the user with the api, 
+    dispaly the user's name as the room header and bam its essentially the same as having a databse but way worse
+    
+  */
   return (
     <>
       <Query query={LIST_ROOMS} fetchPolicy="cache-and-network">
@@ -52,13 +59,14 @@ export default () => {
               dense
             >
               {data?.listRooms?.items.map(room => (
-                <ListItem key={room.id} divider>
+                <ListItem key={room.id} divider >
                   <Button
-                    style={{ flex: 1 }}
+                    style={{ flex: 1, color:'white' }}
                     component={Link}
                     to={`/messages/${room.id}`}
                   >
                     <ListItemText
+                      style={{color:'white'}}
                       primary={room.id}
                       secondary={`Created at ${room.createdAt}`}
                     />

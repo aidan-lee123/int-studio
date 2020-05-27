@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { API, sectionBody } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 import { onError } from "../libs/errorLib";
 import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,12 +8,18 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import { useHistory } from 'react-router-dom';
+import gql from "graphql-tag";
 
+import { graphql, compose } from 'react-apollo'
+import { primary } from '../theme'
+import { listUsers, onCreateUser as OnCreateUser } from '../graphql'
+import Overlay from './Overlay'
+import UserStore from '../mobx/UserStore'
 
 import "./ViewTask.css";
 
@@ -64,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: 100,
   },
-  points: {
+  chat: {
     margin: '10px',
     fontSize: 12,
     position: 'absolute',
@@ -77,19 +83,60 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ViewTask() {
-    const classes = useStyles();
-    const { id } = useParams();
-    const [task, setTask] = useState(null);
-    const [user, setUser] = useState(null);
-    const [content, setContent] = useState("");
-    const [title, setTitle] = useState("");
-    const [points, setPoints] = useState();
-    const [userId, setUserId] = useState("");
+const LIST_ROOMS = gql`
+  query ListRooms {
+    listRooms {
+      items {
+        __typename
+        id
+        createdAt
+      }
+    }
+  }
+`;
 
-    const [degree, setDegree] = useState("");
-    const [name, setName] = useState("");
-    const [bio, setBio] = useState("");
+
+const CREATE_ROOM = gql`
+  mutation CreateRoom($id: ID!) {
+    createRoom(input: { id: $id }) {
+      __typename
+      id
+      createdAt
+    }
+  }
+`;
+
+export default function ViewTask() {
+  const history = useHistory();
+  const classes = useStyles();
+  const { id } = useParams();
+  const [task, setTask] = useState(null);
+  const [user, setUser] = useState(null);
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [userForConvo, setUserForConvo] = useState("");
+  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
+  const [points, setPoints] = useState();
+  const [userId, setUserId] = useState("");
+
+  const [degree, setDegree] = useState("");
+  const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
+
+  const [currentUserId, setCurrentUserId] = useState();
+  const [currentUser, setCurrentUser] = useState();
+
+  const { username } = UserStore;
+  
+  function toggleOverlay (visible, userForConvo){
+    setShowOverlay(visible);
+    setUserForConvo(userForConvo);
+  }
+
+  
+  function goChat (id){
+    history.push(`/messages/${id}`);
+  }
 
   useEffect(() => {
     function loadTask() {
@@ -108,7 +155,12 @@ export default function ViewTask() {
         setUserId(userName);
         console.log(userName)
 
+        const currentUser = await Auth.currentAuthenticatedUser();
+        setCurrentUser(currentUser);
+        console.log(currentUser.username);
+
         const user = await API.get("tasks",  `/tasks/${userName}/user`)
+        
         //const {name, degree} = user;
         console.log(user);
         setUser(user);
@@ -133,8 +185,19 @@ export default function ViewTask() {
     onLoad();
   }, [id]);
   
+
   return (
     <div>
+      {showOverlay && (
+                    <Overlay
+                    user={currentUser}
+                    toggleOverlay={toggleOverlay}
+                    goChat={goChat}
+                    username={name}
+                    userId={userId}
+
+                  />
+      )}
       {task && (
       <Grid container className={classes.root} spacing={2} justify="center" alignItems="center" >
         <Grid item xs>
@@ -163,7 +226,7 @@ export default function ViewTask() {
                     component={Link}
                     to={`/tasks/${userId}/user`}
                   >
-                    Profile
+                    Profle
                   </Button>
             </CardActions>
           </Card>
@@ -181,8 +244,16 @@ export default function ViewTask() {
               {content}
             </Typography>
 
-            <Chip className={classes.points} label={"Points: " + points} />
 
+            <Button 
+            variant="contained" 
+            color="primary" 
+            className={classes.chat} 
+            disableElevation
+            onClick={() => toggleOverlay(true, user)}
+            >
+              Chat
+            </Button>
           </Container>
         </Grid>
 
@@ -191,3 +262,38 @@ export default function ViewTask() {
     </div>
   );
 }
+
+const UsersWithData = compose(
+  graphql(listUsers, {
+    options: {
+      fetchPolicy: 'cache-and-network'
+    },
+    props: props => {
+      return {
+        users: props.data.listUsers ? props.data.listUsers.items : [],
+        subscribeToNewMessages: () => {
+          props.data.subscribeToMore({
+            document: OnCreateUser,
+            updateQuery: (prev, { subscriptionData: { data : { onCreateUser } } }) => {
+    
+              let userArray = prev.listUsers.items.filter(u => u.id !== onCreateUser.id)
+              userArray = [
+                ...userArray,
+                onCreateUser,
+              ]
+              console.log('userArray:' , userArray)
+
+              return {
+                ...prev,
+                listUsers: {
+                  ...prev.listUsers,
+                  items: userArray
+                }
+              }
+            }
+          })
+        },
+      }
+    }
+  })
+)(ViewTask)
