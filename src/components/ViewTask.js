@@ -16,10 +16,8 @@ import { useHistory } from 'react-router-dom';
 import gql from "graphql-tag";
 
 import { graphql, compose } from 'react-apollo'
-import { primary } from '../theme'
 import { listUsers, onCreateUser as OnCreateUser } from '../graphql'
 import Overlay from './Overlay'
-import UserStore from '../mobx/UserStore'
 
 import "./ViewTask.css";
 
@@ -125,8 +123,6 @@ export default function ViewTask() {
 
   const [currentUserId, setCurrentUserId] = useState();
   const [currentUser, setCurrentUser] = useState();
-
-  const { username } = UserStore;
   
   function toggleOverlay (visible, userForConvo){
     setShowOverlay(visible);
