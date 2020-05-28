@@ -46,21 +46,24 @@ export default () => {
 
   var chats = [];
   var chatsIndex = 0;
+  const userName = '1d5eeb7f-52cf-4f47-a251-20344600f2f1';
 
   useEffect(() => {
 
     async function onLoad() {
     const user = await Auth.currentAuthenticatedUser();
+
     setCurrentUser(user.username);
+
     }
     onLoad();
 
   }, []);
 
+
+
   function displayRoom(room){
     var res = room.id.split("+");
-
-
     var i = 0;
     var usernameIndex;
     var otherUserIndex;
@@ -88,11 +91,11 @@ export default () => {
       chatsIndex++;
     }
 
-
+    console.log(otherUser)
     console.log(chats);
 
     return(
-      <ListItem key={room.id}>
+      <ListItem key={res[otherUserIndex]}>
         <Button
         style={{ flex: 1, color:'white' }}
         component={Link}
@@ -100,9 +103,8 @@ export default () => {
         >
         <ListItemText
         style={{color:'white'}}
-        primary={room.id}
-        secondary={`Created at ${room.createdAt}`}
-      />
+        primary={'Aidan Lee'}
+        />
     </Button>
       </ListItem>
     )
@@ -127,7 +129,7 @@ export default () => {
           return (
             <List
               subheader={
-                <ListSubheader component="div">List of rooms</ListSubheader>
+                <ListSubheader component="div" style={{ flex: 1, color:'white' }}>Messages</ListSubheader>
               }
               dense
             >

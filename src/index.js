@@ -35,9 +35,6 @@ Amplify.configure({
       },
     ]
   },
-  AppSync: {
-    
-  }
 });
 
 const client = new AWSAppSyncClient({

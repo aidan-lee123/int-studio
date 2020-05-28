@@ -1,41 +1,75 @@
 import { GiftedChat } from "react-web-gifted-chat";
-import React from "react";
+import React, { useEffect, useState }from "react";
+import {Auth} from 'aws-amplify'
 
-class Chat extends React.Component {
-  componentDidMount() {
-    this.props.subscribeToNewMessages();
+export default function Chat(props) {
+  const [currentUser, setCurrentUser] = useState();
+
+  useEffect(() => { 
+    props.subscribeToNewMessages();
+
+    async function onLoad(){
+      const user = await Auth.currentAuthenticatedUser();
+
+      setCurrentUser(user);
+      console.log(currentUser);
+    }
+
+    onLoad();
+  }, []);
+
+
+  function onSend(messages = []) {
+    messages.map(m => props.onSend(m.text));
   }
 
-  onSend(messages = []) {
-    messages.map(m => this.props.onSend(m.text));
+
+
+  const { loading, error, data, user } = props;
+  if (error) return <div>{error.message}</div>;
+  if (loading) return <div>Loading</div>;
+
+  console.log(props.user);
+
+  function getContent(str){
+    const content = str.split("+");
+    return content[0];
   }
 
-  render() {
-    const { loading, error, data, user } = this.props;
-    if (error) return <div>{error.message}</div>;
-    if (loading) return <div>Loading</div>;
+  
+  function getUser(str){
+    const content = str.split("+");
+    if(content[0] == props.user){
+      return content[0];
+    }
+    else if(content[1] == props.user){
+      return content[1];
+    }
 
-    const messages = data.getRoom.messages.items;
-    return (
-      <div style={styles.container}>
-        <GiftedChat
-          messages={messages.map(m => ({
-            id: m.id,
-            text: m.content,
-            createdAt: new Date(m.when),
-            user: {
-              id: m.owner,
-              name: m.owner
-            }
-          }))}
-          onSend={messages => this.onSend(messages)}
-          user={{
-            id: user
-          }}
-        />
-      </div>
-    );
+    return 'error';
   }
+
+  const messages = data.getRoom.messages.items;
+  return (
+    <div style={styles.container}>
+      <GiftedChat
+        messages={messages.map(m => ({
+          id: m.id,
+          text: getContent(m.content),
+          createdAt: new Date(m.when),
+          user: {
+            id: getUser(m.content),
+            name: getUser(m.content)
+          }
+        }))}
+        onSend={messages => onSend(messages)}
+        user={{
+          id: user
+        }}
+      />
+    </div>
+  );
+  
 }
 
 const styles = {
@@ -44,5 +78,3 @@ const styles = {
     height: "75vh"
   }
 };
-
-export default Chat;

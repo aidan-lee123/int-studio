@@ -7,8 +7,9 @@ import { Nav, Navbar, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import Routes from "./Routes";
 import { onError } from "./libs/errorLib";
+import { withAuthenticator } from "aws-amplify-react";
 
-export default () => {
+function App() {
   const history = useHistory();
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [isAuthenticated, userHasAuthenticated] = useState(false);
@@ -84,3 +85,5 @@ export default () => {
   );
   
 };
+
+export default withAuthenticator(App);

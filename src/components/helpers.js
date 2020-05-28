@@ -1,5 +1,6 @@
 import React from "react";
 import { Auth } from "aws-amplify";
+import { withAuthenticator } from "aws-amplify-react";
 
 export const withUser = WrappedComponent => {
   class HOC extends React.Component {
@@ -8,6 +9,7 @@ export const withUser = WrappedComponent => {
     };
     async componentDidMount() {
       const user = await Auth.currentAuthenticatedUser();
+      console.log(user.username);
       this.setState({
         username: user.username
       });

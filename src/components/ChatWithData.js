@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { Mutation, Query } from "react-apollo";
 import gql from "graphql-tag";
 import uuid from "uuid/v4";
-
+import { Auth } from "aws-amplify";
 import { withUser } from "./helpers";
 import Chat from "./Chat";
 
@@ -50,7 +50,23 @@ const CREATE_MESSAGES_SUB = gql`
   }
 `;
 
+
+
+
 function ChatWithData({ match, username }) {
+
+  const [currentUser, setCurrentUser] = useState();
+
+  useEffect(() => { 
+    async function onLoad(){
+      const currentUser = await Auth.currentAuthenticatedUser();
+      //console.log(currentUser.username);
+      setCurrentUser(currentUser.username);
+    }
+
+    onLoad();
+  }, []);
+
   return (
     <Query
       variables={{
@@ -64,7 +80,7 @@ function ChatWithData({ match, username }) {
           {mutate => (
             <Chat
               {...results}
-              user={username}
+              user={currentUser}
               data={data}
               subscribeToNewMessages={() => {
                 subscribeToMore({
@@ -95,23 +111,24 @@ function ChatWithData({ match, username }) {
               onSend={content => {
                 mutate({
                   variables: {
-                    content,
+                    content: content + "+" + currentUser,
+                    owner: currentUser,
                     roomId: match.params.roomId,
-                    when: new Date()
+                    when: new Date(),
                   },
                   optimisticResponse: () => ({
                     createMessage: {
                       __typename: "Message",
                       id: uuid(),
                       when: new Date(),
-                      owner: username,
-                      content
+                      owner: currentUser,
+                      content: content + "+" + currentUser
                     }
                   }),
                   update: (cache, { data: { createMessage } }) => {
                     const data = cache.readQuery({
                       query: GET_ROOM_MESSAGES,
-                      variables: { roomId: match.params.roomId }
+                      variables: { roomId: match.params.roomId, }
                     });
                     data.getRoom.messages.items = [
                       createMessage,
@@ -136,4 +153,5 @@ function ChatWithData({ match, username }) {
   );
 }
 
-export default withUser(ChatWithData);
+export default ChatWithData;
+
