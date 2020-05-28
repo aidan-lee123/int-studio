@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { API, Auth } from "aws-amplify";
 import {
   Button,
   List,
@@ -37,9 +38,75 @@ const CREATE_ROOM = gql`
   }
 `;
 
+
+
 export default () => {
+  const [currentUser, setCurrentUser] = useState();
+  const [otherUser, setOtherUser] = useState();
+
+  var chats = [];
+  var chatsIndex = 0;
+
+  useEffect(() => {
+
+    async function onLoad() {
+    const user = await Auth.currentAuthenticatedUser();
+    setCurrentUser(user.username);
+    }
+    onLoad();
+
+  }, []);
+
+  function displayRoom(room){
+    var res = room.id.split("+");
 
 
+    var i = 0;
+    var usernameIndex;
+    var otherUserIndex;
+
+    for(i = 0; i < 2; i++){
+      if(res[i] == currentUser)
+      {
+        usernameIndex = i;
+      }
+    }
+
+    switch(usernameIndex){
+      case 0:
+        otherUserIndex = 1;
+        break;
+      case 1:
+        otherUserIndex = 0;
+        break;
+    }
+    
+    var x = 0;
+    
+    if(res[usernameIndex] == currentUser){
+      chats[chatsIndex] = room;
+      chatsIndex++;
+    }
+
+
+    console.log(chats);
+
+    return(
+      <ListItem key={room.id}>
+        <Button
+        style={{ flex: 1, color:'white' }}
+        component={Link}
+        to={`/messages/${room.id}`}
+        >
+        <ListItemText
+        style={{color:'white'}}
+        primary={room.id}
+        secondary={`Created at ${room.createdAt}`}
+      />
+    </Button>
+      </ListItem>
+    )
+  }
   /* THIS IS FOR TOMORROW AIDAN
     Maybe make it so that you split the name and then just display the room if it matches, after that grab the other id and fetch the user with the api, 
     dispaly the user's name as the room header and bam its essentially the same as having a databse but way worse
@@ -51,6 +118,12 @@ export default () => {
         {({ data, loading, error }) => {
           if (error) return <div>{error.message}</div>;
           if (loading && !data) return <CircularProgress />;
+
+          var index;
+          data.listRooms.items.map(room => (
+            displayRoom(room)
+          ))
+
           return (
             <List
               subheader={
@@ -59,62 +132,13 @@ export default () => {
               dense
             >
               {data?.listRooms?.items.map(room => (
-                <ListItem key={room.id} divider >
-                  <Button
-                    style={{ flex: 1, color:'white' }}
-                    component={Link}
-                    to={`/messages/${room.id}`}
-                  >
-                    <ListItemText
-                      style={{color:'white'}}
-                      primary={room.id}
-                      secondary={`Created at ${room.createdAt}`}
-                    />
-                  </Button>
-                </ListItem>
+                 displayRoom(room)
               ))}
             </List>
           );
+
         }}
       </Query>
-      <Mutation mutation={CREATE_ROOM}>
-        {mutate => (
-          <Fab
-            color="primary"
-            aria-label="Add"
-            style={{ position: "absolute", bottom: 10, right: 10 }}
-            onClick={() => {
-              const id = uuid();
-              mutate({
-                variables: {
-                  id
-                },
-                optimisticResponse: () => ({
-                  createRoom: {
-                    __typename: "Room",
-                    id,
-                    createdAt: new Date()
-                  }
-                }),
-                update: (cache, { data: { createRoom } }) => {
-                  const data = cache.readQuery({ query: LIST_ROOMS });
-
-                  data.listRooms.items = [
-                    createRoom,
-                    ...data.listRooms.items.filter(
-                      item => item.id !== createRoom.id
-                    )
-                  ];
-
-                  cache.writeQuery({ query: LIST_ROOMS, data });
-                }
-              });
-            }}
-          >
-          <FaPlus />
-          </Fab>
-        )}
-      </Mutation>
     </>
   );
 };
