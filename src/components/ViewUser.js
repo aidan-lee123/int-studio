@@ -168,7 +168,7 @@ useEffect(() => {
                   {"Created: " + new Date(task.createdAt).toLocaleString()} 
                 </Typography>
 
-                <Chip className={classes.points} label={"Points: " + task.points} />
+                {/*<Chip className={classes.points} label={"Points: " + task.points} />*/}
 
                 <Link to={`/tasks/${task.taskId}/view`} className="btn btn-info btn-lg viewTask">
                   <b>view task</b>

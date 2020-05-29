@@ -107,9 +107,9 @@ export default () => {
     console.log(chats);
 
     return(
-      <ListItem key={res[otherUserIndex]}>
+      <ListItem key={res[otherUserIndex]} style={{height: '50px'}}>
         <Button
-        style={{ flex: 1, color:'white' }}
+        style={{ flex: 1, color:'white', fontSize: '30px'}}
         component={Link}
         to={`/messages/${room.id}`}
         >
@@ -136,7 +136,7 @@ export default () => {
           return (
             <List
               subheader={
-                <ListSubheader component="div" style={{ flex: 1, color:'white' }}>Messages</ListSubheader>
+                <ListSubheader component="div" style={{ flex: 1, color:'white', fontSize: '30px' }}>Messages</ListSubheader>
               }
               dense
             >
