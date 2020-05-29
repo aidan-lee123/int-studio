@@ -47,7 +47,7 @@ function App() {
       <Navbar fluid collapseOnSelect staticTop bsStyle="default" style={{backgroundColor: "#0b0c16", borderColor: "#0b0c16"}}>
         <Navbar.Header >
           <Navbar.Brand>
-            <Link to="/">Learn Together</Link>
+            <Link to="/">Teach Other</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>

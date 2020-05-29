@@ -153,7 +153,6 @@ export default function ViewTask() {
 
         const currentUser = await Auth.currentAuthenticatedUser();
         setCurrentUser(currentUser);
-        console.log(currentUser.username);
 
         const user = await API.get("tasks",  `/tasks/${userName}/user`)
         

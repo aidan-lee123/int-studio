@@ -15,6 +15,7 @@ import gql from "graphql-tag";
 import uuid from "uuid/v4";
 import { Query, Mutation } from "react-apollo";
 import { FaPlus } from 'react-icons/fa';
+import { onError } from "../libs/errorLib";
 
 const LIST_ROOMS = gql`
   query ListRooms {
@@ -42,7 +43,7 @@ const CREATE_ROOM = gql`
 
 export default () => {
   const [currentUser, setCurrentUser] = useState();
-  const [otherUser, setOtherUser] = useState();
+  const [otherUserName, setOtherUserName] = useState("");
 
   var chats = [];
   var chatsIndex = 0;
@@ -60,6 +61,20 @@ export default () => {
 
   }, []);
 
+
+  async function getUser(id){
+
+      const otherUser = await API.get("tasks",  `/tasks/${id}/user`)
+      console.log(otherUser);
+
+      var i;
+      for(i=0; i < 7; i++){
+        if(otherUser[i].Name == "name")
+          setOtherUserName(otherUser[i].Value);
+      }
+    
+
+  }
 
 
   function displayRoom(room){
@@ -84,14 +99,11 @@ export default () => {
         break;
     }
     
+    getUser(res[otherUserIndex]);
+    console.log(otherUserName)
     var x = 0;
-    
-    if(res[usernameIndex] == currentUser){
-      chats[chatsIndex] = room;
-      chatsIndex++;
-    }
 
-    console.log(otherUser)
+    console.log(res[otherUserIndex])
     console.log(chats);
 
     return(
@@ -103,7 +115,7 @@ export default () => {
         >
         <ListItemText
         style={{color:'white'}}
-        primary={'Aidan Lee'}
+        primary={otherUserName}
         />
     </Button>
       </ListItem>
@@ -120,11 +132,6 @@ export default () => {
         {({ data, loading, error }) => {
           if (error) return <div>{error.message}</div>;
           if (loading && !data) return <CircularProgress />;
-
-          var index;
-          data.listRooms.items.map(room => (
-            displayRoom(room)
-          ))
 
           return (
             <List
