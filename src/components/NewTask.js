@@ -83,7 +83,7 @@ export default function NewTask() {
             onChange={e => setContent(e.target.value)}
           />
         </FormGroup>
-        
+        {/*
         <Grid container spacing={100}>
 
           <div className="date">
@@ -120,7 +120,7 @@ export default function NewTask() {
             </div>
 
 
-        </Grid>
+          </Grid> */}
         <LoaderButton
           block
           type="submit"
