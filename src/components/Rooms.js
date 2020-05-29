@@ -48,6 +48,7 @@ export default () => {
   var chats = [];
   var chatsIndex = 0;
   const userName = '1d5eeb7f-52cf-4f47-a251-20344600f2f1';
+  var userIndex = 0;
 
   useEffect(() => {
 
@@ -103,10 +104,10 @@ export default () => {
     getUser(res[otherUserIndex]);
     console.log(otherUserName)
     name = otherUserName;
-    var x = 0;
 
     console.log(res[otherUserIndex])
     console.log(chats);
+    userIndex++;
 
     return(
       <ListItem key={res[otherUserIndex]} style={{height: '50px'}}>
@@ -117,7 +118,7 @@ export default () => {
         >
         <ListItemText
         style={{color:'white'}}
-        primary={name}
+        primary={"User: " + userIndex}
         />
     </Button>
       </ListItem>
