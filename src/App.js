@@ -44,10 +44,10 @@ function App() {
   return (
     !isAuthenticating &&
     <div className="container">
-      <Navbar fluid collapseOnSelect staticTop bsStyle="default" style={{backgroundColor: "#0b0c16", borderColor: "#0b0c16"}}>
+      <Navbar fluid collapseOnSelect staticTop bsStyle="default" style={{backgroundColor: "#0b0c16", borderColor: "#0b0c16", color: "white"}}>
         <Navbar.Header >
           <Navbar.Brand>
-            <Link to="/">Teach Other</Link>
+            <Link to="/"><p style={{color: "white"}}>Teach Other</p></Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
@@ -56,20 +56,20 @@ function App() {
           {isAuthenticated ? (
               <>
                 <LinkContainer to="/messages">
-                  <NavItem>Messages</NavItem>
+                  <NavItem ><p style={{color: "white"}}>Messages</p></NavItem>
                 </LinkContainer>
                 <LinkContainer to="/profile">
-                  <NavItem>Profile</NavItem>
+                  <NavItem><p style={{color: "white"}}>Profile</p></NavItem>
                 </LinkContainer>
-                <NavItem onClick={handleLogout}>Logout</NavItem>
+                <NavItem onClick={handleLogout}><p style={{color: "white"}}>Logout</p></NavItem>
               </>
             ) : (
               <>
                 <LinkContainer to="/signup">
-                  <NavItem>Signup</NavItem>
+                  <NavItem><p style={{color: "white"}}>Signup</p></NavItem>
                 </LinkContainer>
                 <LinkContainer to="/login">
-                  <NavItem>Login</NavItem>
+                  <NavItem><p style={{color: "white"}}>Login</p></NavItem>
                 </LinkContainer>
               </>
             )}

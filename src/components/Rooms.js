@@ -68,7 +68,7 @@ export default () => {
       console.log(otherUser);
 
       var i;
-      for(i=0; i < 7; i++){
+      for(i=0; i < 5; i++){
         if(otherUser[i].Name == "name")
           setOtherUserName(otherUser[i].Value);
       }
@@ -78,6 +78,7 @@ export default () => {
 
 
   function displayRoom(room){
+    var name;
     var res = room.id.split("+");
     var i = 0;
     var usernameIndex;
@@ -101,6 +102,7 @@ export default () => {
     
     getUser(res[otherUserIndex]);
     console.log(otherUserName)
+    name = otherUserName;
     var x = 0;
 
     console.log(res[otherUserIndex])
@@ -115,7 +117,7 @@ export default () => {
         >
         <ListItemText
         style={{color:'white'}}
-        primary={otherUserName}
+        primary={name}
         />
     </Button>
       </ListItem>
@@ -140,7 +142,7 @@ export default () => {
               }
               dense
             >
-              {data?.listRooms?.items.map(room => (
+              {data.listRooms.items.map(room => (
                  displayRoom(room)
               ))}
             </List>

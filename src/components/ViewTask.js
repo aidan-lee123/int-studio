@@ -131,7 +131,7 @@ export default function ViewTask() {
 
   
   function goChat (id){
-    history.push(`/messages/${id}`);
+    setTimeout(() => { history.push(`/messages/${id}`);}, 2000);
   }
 
   useEffect(() => {
@@ -162,13 +162,11 @@ export default function ViewTask() {
         setTask(task);
         
         var i;
-        for(i=0; i < 7; i++){
+        for(i=0; i < 5; i++){
           if(user[i].Name == "name")
             setName(user[i].Value);
           else if(user[i].Name == "custom:degree")
             setDegree(user[i].Value)
-          else if(user[i].Name == "custom:bio")
-            setBio(user[i].Value)
         }
 
 
