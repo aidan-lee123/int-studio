@@ -13,13 +13,13 @@ export default function Home() {
   function renderLogin() {
     return (
       <div className="lander">
-        <h1>Teachother</h1>
+        <img src={Logo}/>
         <div>
-          <Link to="/login" className="btn btn-info btn-lg">
-            Login
-          </Link>
-          <Link to="/signup" className="btn btn-success btn-lg">
+          <Link to="/signup" className="btn btn-info btn-lg viewTasks">
             Signup
+          </Link>
+          <Link to="/login" className="btn btn-success btn-lg newTask">
+            Login
           </Link>
         </div>
       </div>
