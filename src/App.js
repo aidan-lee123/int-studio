@@ -65,7 +65,7 @@ function App() {
 
                   <LinkContainer to="/messages">
                     
-                    <NavItem ><p style={{color: "white"}}>Messages</p></NavItem>
+                    <NavItem ><StyledBadge badgeContent={2} color="primary"><p style={{color: "white"}}>Messages</p></StyledBadge></NavItem>
                   </LinkContainer>
 
                 <LinkContainer to="/profile">

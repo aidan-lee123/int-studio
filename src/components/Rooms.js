@@ -118,7 +118,7 @@ export default () => {
         >
         <ListItemText
         style={{color:'white'}}
-        primary={"User: " + userIndex}
+        primary={"Nathan Palma"}
         />
     </Button>
       </ListItem>
