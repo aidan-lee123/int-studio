@@ -41,8 +41,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     backgroundColor: '#7fc4fd',
     height: '100%',
-    maxWidth: 350,
-    minWidth: 300,
+    maxWidth: 320,
+    minWidth: 250,
     textAlign: 'center',
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -150,9 +150,11 @@ export default function Profile() {
 
           <Card className={classes.card}>
 
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
-
               <CardContent>
+
+                <Typography gutterBottom variant="h3" component="h2" style={{color: 'white'}}>
+                  Completed
+                </Typography>
 
                 <Typography gutterBottom variant="h4" component="h2">
                   {task.title}
