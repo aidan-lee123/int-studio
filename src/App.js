@@ -8,6 +8,13 @@ import { LinkContainer } from "react-router-bootstrap";
 import Routes from "./Routes";
 import { onError } from "./libs/errorLib";
 import { withAuthenticator } from "aws-amplify-react";
+import Badge from '@material-ui/core/Badge';
+import { withStyles } from '@material-ui/core/styles';
+
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+  },
+}))(Badge);
 
 function App() {
   const history = useHistory();
@@ -55,9 +62,12 @@ function App() {
           <Nav pullRight>
           {isAuthenticated ? (
               <>
-                <LinkContainer to="/messages">
-                  <NavItem ><p style={{color: "white"}}>Messages</p></NavItem>
-                </LinkContainer>
+
+                  <LinkContainer to="/messages">
+                    
+                    <NavItem ><StyledBadge badgeContent={2} color="secondary"><p style={{color: "white"}}>Messages</p></StyledBadge></NavItem>
+                  </LinkContainer>
+
                 <LinkContainer to="/profile">
                   <NavItem><p style={{color: "white"}}>Profile</p></NavItem>
                 </LinkContainer>
