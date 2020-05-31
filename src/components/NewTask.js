@@ -23,7 +23,6 @@ export default function NewTask() {
     return (
       content.length > 0 &&
       title.length > 0 &&
-      points > 0
       );
   }
 
