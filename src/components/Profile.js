@@ -152,9 +152,6 @@ export default function Profile() {
 
               <CardContent>
 
-                <Typography gutterBottom variant="h3" component="h2" style={{color: 'white'}}>
-                  Completed
-                </Typography>
 
                 <Typography gutterBottom variant="h4" component="h2">
                   {task.title}
