@@ -22,7 +22,7 @@ export default function NewTask() {
   function validateForm() {
     return (
       content.length > 0 &&
-      title.length > 0 &&
+      title.length > 0 
       );
   }
 
