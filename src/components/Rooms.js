@@ -7,12 +7,13 @@ import {
   ListItem,
   ListItemText,
   CircularProgress,
-  Fab
+  Fab,
+  Typography,
+  withStyles
 } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
 import gql from "graphql-tag";
-import uuid from "uuid/v4";
 import { Query, Mutation } from "react-apollo";
 import { FaPlus } from 'react-icons/fa';
 import { onError } from "../libs/errorLib";
@@ -39,11 +40,29 @@ const CREATE_ROOM = gql`
   }
 `;
 
+const CustomListItem = withStyles({
+  root: {
+    '&:hover': {
+      backgroundColor: '#0069d9',
+      borderColor: '#0062cc',
+      boxShadow: 'none',
+    },
+    '&:active': {
+      boxShadow: 'none',
+      backgroundColor: '#0062cc',
+      borderColor: '#005cbf',
+    },
+    '&:focus': {
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+    },
+  },
+})(ListItem)
 
 
 export default () => {
   const [currentUser, setCurrentUser] = useState();
   const [otherUserName, setOtherUserName] = useState("");
+
 
   var chats = [];
   var chatsIndex = 0;
@@ -110,18 +129,21 @@ export default () => {
     userIndex++;
 
     return(
-      <ListItem key={res[otherUserIndex]} style={{height: '50px'}}>
+      <CustomListItem key={res[otherUserIndex]} style={{ textAlign: 'left'}} >
         <Button
-        style={{ flex: 1, color:'white', fontSize: '30px'}}
+        style={{ flex: 1, color:'white', fontWeight: '300', textAlign: 'left'}}
         component={Link}
         to={`/messages/${room.id}`}
         >
-        <ListItemText
-        style={{color:'white'}}
-        primary={"Nathan Palma"}
-        />
-    </Button>
-      </ListItem>
+          <ListItemText
+          primary={
+            <Typography variant="h3" style={{textAlign: 'left'}}>
+            Nathan Palma
+          </Typography>
+          }
+          />
+         </Button>
+      </CustomListItem>
     )
   }
   /* THIS IS FOR TOMORROW AIDAN

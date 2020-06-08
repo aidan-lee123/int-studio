@@ -1,11 +1,8 @@
 import React, { useState } from 'react'
 import { css } from 'glamor'
-import { useHistory } from "react-router-dom";
 import { primary } from '../theme'
 import { Query, Mutation } from "react-apollo"
 import gql from "graphql-tag";
-import uuid from "uuid/v4";
-import { Auth } from "aws-amplify";
 
 const LIST_ROOMS = gql`
   query ListRooms {
@@ -75,7 +72,7 @@ export default function Overlay(props) {
               props.toggleOverlay(false);
               props.goChat(id);
             }}>
-            <p {...css(styles.buttonText)}>Yes</p>
+            <p {...css(styles.buttonTextYes)}>Yes</p>
           </div>
           )}
           </Mutation>
@@ -113,6 +110,12 @@ const styles = {
     margin: 0,
     textAlign: 'center',
     fontWeight: 700
+  },
+  buttonTextYes: {
+    margin: 0,
+    textAlign: 'center',
+    fontWeight: 700,
+    color: 'white'
   },
   greetingTitle: {
     fontSize: 24,

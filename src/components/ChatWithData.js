@@ -153,5 +153,12 @@ function ChatWithData({ match, username }) {
   );
 }
 
+const styles = {
+  chat: {
+    flex: 1,
+    height: "85vh"
+  }
+};
+
 export default ChatWithData;
 

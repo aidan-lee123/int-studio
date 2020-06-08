@@ -51,7 +51,7 @@ function App() {
   return (
     !isAuthenticating &&
     <div className="container">
-      <Navbar fluid collapseOnSelect staticTop bsStyle="default" style={{backgroundColor: "#0b0c16", borderColor: "#0b0c16", color: "white"}}>
+      <Navbar inverse fluid collapseOnSelect staticTop bsStyle="default" style={{backgroundColor: "#04082E", borderColor: "#0b0c16", color: "white"}}>
         <Navbar.Header >
           <Navbar.Brand>
             <Link to="/"><p style={{color: "white"}}>Teach Other</p></Link>

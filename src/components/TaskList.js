@@ -176,7 +176,7 @@ export default function Home() {
   function renderTasks() {
     return (
       <div className="tasks" style={{width: '100%'}}>
-        <PageHeader style={{backgroundColor: "#0b0c16", borderColor: "#0b0c16", color: 'white', marginLeft: 'auto', marginRight: 'auto'}}>All Tasks</PageHeader>
+        <PageHeader style={{backgroundColor: "#04082E", borderColor: "#0b0c16", color: 'white', marginLeft: 'auto', marginRight: 'auto'}}>All Tasks</PageHeader>
         <Grid container className={classes.root} spacing={2}>
           {!isLoading && renderTasksList(tasks)}
         </Grid>
