@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { css } from 'glamor'
 import { primary } from '../theme'
-import { Query, Mutation } from "react-apollo"
+import { Mutation } from "react-apollo"
 import gql from "graphql-tag";
 
 const LIST_ROOMS = gql`

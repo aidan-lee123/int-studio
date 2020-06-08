@@ -1,9 +1,8 @@
-import React, { Component, useState, useEffect } from "react";
+import React, {  useState, useEffect } from "react";
 import { Mutation, Query } from "react-apollo";
 import gql from "graphql-tag";
 import uuid from "uuid/v4";
 import { Auth } from "aws-amplify";
-import { withUser } from "./helpers";
 import Chat from "./Chat";
 
 const CREATE_MESSAGE = gql`
@@ -152,13 +151,6 @@ function ChatWithData({ match, username }) {
     </Query>
   );
 }
-
-const styles = {
-  chat: {
-    flex: 1,
-    height: "85vh"
-  }
-};
 
 export default ChatWithData;
 

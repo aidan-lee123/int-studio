@@ -2,7 +2,6 @@ import React, { useState} from "react";
 import { useHistory } from "react-router-dom";
 import { FormGroup, FormControl } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
-import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import "./Profile.css";
 import { Auth } from "aws-amplify";
@@ -11,7 +10,6 @@ import { Auth } from "aws-amplify";
 
 export default function EditProfile() {
   const history = useHistory();
-  const { isAuthenticated } = useAppContext();
   const [bio, setBio] = useState("");
 
   function validateForm() {
@@ -25,7 +23,7 @@ export default function EditProfile() {
   
     try {
       const user = await Auth.currentAuthenticatedUser();
-      const resule = await Auth.updateUserAttributes(user, {
+      await Auth.updateUserAttributes(user, {
         'custom:bio': bio
       })
       history.push('/profile');

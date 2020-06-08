@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { PageHeader } from "react-bootstrap";
+
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 
@@ -14,7 +14,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-import Chip from '@material-ui/core/Chip';
+
 import Grid from '@material-ui/core/Grid'
 import { CardActionArea } from "@material-ui/core";
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   profile: {
     padding: theme.spacing(2),
-    height: '100%',
+
     maxWidth: 350,
     minWidth: 300,
     textAlign: 'center',
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   card: {
     padding: theme.spacing(2),
     backgroundColor: '#7fc4fd',
-    height: '100%',
+
     maxWidth: 320,
     minWidth: 250,
     textAlign: 'center',
@@ -100,7 +100,6 @@ export default function Profile() {
   const [userName, setUserName] = useState();
   const [userDegree, setUserDegree] = useState();
   const [userBio, setUserBio] = useState();
-  const [userPoints, setUserPoints] = useState();
 
 
   useEffect(() => {
@@ -136,12 +135,10 @@ export default function Profile() {
     const currentUserInfo = await Auth.currentUserInfo()
     const name = currentUserInfo.attributes['name'];
     const degree = currentUserInfo.attributes['custom:degree'];
-    const points = currentUserInfo.attributes['custom:points'];
     const bio = currentUserInfo.attributes['custom:bio'];
     setUserName(name);
     setUserDegree(degree);
     setUserBio(bio);
-    setUserPoints(points);
   }
 
   function renderTasksList(tasks) {

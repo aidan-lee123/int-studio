@@ -7,14 +7,7 @@ import { Nav, Navbar, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import Routes from "./Routes";
 import { onError } from "./libs/errorLib";
-import { withAuthenticator } from "aws-amplify-react";
-import Badge from '@material-ui/core/Badge';
-import { withStyles } from '@material-ui/core/styles';
 
-const StyledBadge = withStyles((theme) => ({
-  badge: {
-  },
-}))(Badge);
 
 function App() {
   const history = useHistory();

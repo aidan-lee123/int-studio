@@ -5,19 +5,14 @@ import LoaderButton from "../components/LoaderButton";
 import { onError } from "../libs/errorLib";
 import "./NewTask.css";
 import { API } from "aws-amplify";
-import { Slider, Typography } from '@material-ui/core';
-import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
-import DateFnsUtils from '@date-io/date-fns';
-import Grid from '@material-ui/core/Grid';
+import { Typography } from '@material-ui/core';
 
 
 export default function NewTask() {
   const history = useHistory();
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
-  const [points, setPoints] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedDate, setSelectedDate] = React.useState(Date.now());
 
   function validateForm() {
     return (
@@ -33,7 +28,7 @@ export default function NewTask() {
   
     try {
   
-      await createTask({ content, title, points, selectedDate });
+      await createTask({ content, title });
       history.push("/tasks");
     } catch (e) {
       onError(e);
@@ -47,15 +42,7 @@ export default function NewTask() {
       body: task
     });
   }
-
-  const handleSliderChange = (event, newValue) => {
-    setPoints(newValue);
-  };
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-
+  
   return (
     <div className="NewTask">
       <form onSubmit={handleSubmit}>
@@ -82,44 +69,6 @@ export default function NewTask() {
             onChange={e => setContent(e.target.value)}
           />
         </FormGroup>
-        {/*
-        <Grid container spacing={100}>
-
-          <div className="date">
-              <Typography id="range-slider" gutterBottom variant='h4' style={{color: 'white'}}>
-                Availability
-              </Typography>
-                <MuiPickersUtilsProvider utils={DateFnsUtils} >
-                  <DateTimePicker
-                  autoOk
-                  disablePast
-                  variant="static"
-                  openTo="date"
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                  
-                  />
-                </MuiPickersUtilsProvider>
-            </div>
-            
-            <div className="points">
-              <Typography id="range-slider" gutterBottom variant='h4' style={{color: 'white'}}>
-                Points 
-              </Typography>
-              <Slider
-              defaultValue={0}
-              value={points}
-              aria-labelledby="discrete-slider-small-steps"
-              step={1}
-              min={1}
-              max={30}
-              valueLabelDisplay="auto"
-              onChange={handleSliderChange}
-              />
-            </div>
-
-
-          </Grid> */}
         <LoaderButton
           block
           type="submit"

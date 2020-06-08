@@ -1,4 +1,4 @@
-import { GiftedChat, InputToolbar, Composer, Send} from "react-web-gifted-chat";
+import { GiftedChat, InputToolbar} from "react-web-gifted-chat";
 import React, { useEffect, useState }from "react";
 import {Auth} from 'aws-amplify'
 import "./Chat.css";
@@ -69,10 +69,10 @@ export default function Chat(props) {
   
   function getUser(str){
     const content = str.split("+");
-    if(content[0] == props.user){
+    if(content[0] === props.user){
       return content[0];
     }
-    else if(content[1] == props.user){
+    else if(content[1] === props.user){
       return content[1];
     }
 

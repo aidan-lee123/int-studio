@@ -7,16 +7,13 @@ import {
   ListItem,
   ListItemText,
   CircularProgress,
-  Fab,
   Typography,
   withStyles
 } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
 import gql from "graphql-tag";
-import { Query, Mutation } from "react-apollo";
-import { FaPlus } from 'react-icons/fa';
-import { onError } from "../libs/errorLib";
+import { Query } from "react-apollo";
 
 const LIST_ROOMS = gql`
   query ListRooms {
@@ -26,16 +23,6 @@ const LIST_ROOMS = gql`
         id
         createdAt
       }
-    }
-  }
-`;
-
-const CREATE_ROOM = gql`
-  mutation CreateRoom($id: ID!) {
-    createRoom(input: { id: $id }) {
-      __typename
-      id
-      createdAt
     }
   }
 `;
@@ -67,9 +54,6 @@ export default () => {
 
 
   var chats = [];
-  var chatsIndex = 0;
-  const userName = '1d5eeb7f-52cf-4f47-a251-20344600f2f1';
-  var userIndex = 0;
 
   useEffect(() => {
 
@@ -91,7 +75,7 @@ export default () => {
 
       var i;
       for(i=0; i < 5; i++){
-        if(otherUser[i].Name == "name")
+        if(otherUser[i].Name === "name")
           setOtherUserName(otherUser[i].Value);
       }
     
@@ -107,7 +91,7 @@ export default () => {
     var otherUserIndex;
 
     for(i = 0; i < 2; i++){
-      if(res[i] == currentUser)
+      if(res[i] === currentUser)
       {
         usernameIndex = i;
       }
@@ -128,7 +112,6 @@ export default () => {
 
     console.log(res[otherUserIndex])
     console.log(chats);
-    userIndex++;
 
     return(
       <CustomListItem key={res[otherUserIndex]} >

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../libs/contextLib";
 import Logo from "../images/logo.png";
@@ -13,7 +13,7 @@ export default function Home() {
   function renderLogin() {
     return (
       <div className="lander">
-        <img src={Logo}/>
+        <img src={Logo} alt="Teach Other"/>
         <div>
           <Link to="/signup" className="btn btn-info btn-lg viewTasks">
             Signup
@@ -30,7 +30,7 @@ export default function Home() {
   function renderLander() {
     return (
       <div className="lander">
-        <img src={Logo}/>
+        <img src={Logo} alt="Teach Other"/>
         <div>
           <Link to="/tasks/new" className="btn btn-info btn-lg viewTasks">
             <b>POST A TASK</b>

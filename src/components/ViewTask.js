@@ -13,10 +13,8 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
-import gql from "graphql-tag";
 
-import { graphql, compose } from 'react-apollo'
-import { listUsers, onCreateUser as OnCreateUser } from '../graphql'
+
 import Overlay from './Overlay'
 
 import "./ViewTask.css";
@@ -30,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
   },
   profile: {
     padding: theme.spacing(2),
-    height: '100%',
     maxWidth: 350,
     textAlign: 'center',
     marginLeft: 'auto',
@@ -81,29 +78,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LIST_ROOMS = gql`
-  query ListRooms {
-    listRooms {
-      items {
-        __typename
-        id
-        createdAt
-      }
-    }
-  }
-`;
-
-
-const CREATE_ROOM = gql`
-  mutation CreateRoom($id: ID!) {
-    createRoom(input: { id: $id }) {
-      __typename
-      id
-      createdAt
-    }
-  }
-`;
-
 export default function ViewTask() {
   const history = useHistory();
   const classes = useStyles();
@@ -111,22 +85,20 @@ export default function ViewTask() {
   const [task, setTask] = useState(null);
   const [user, setUser] = useState(null);
   const [showOverlay, setShowOverlay] = useState(false);
-  const [userForConvo, setUserForConvo] = useState("");
+
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
-  const [points, setPoints] = useState();
   const [userId, setUserId] = useState("");
 
   const [degree, setDegree] = useState("");
   const [name, setName] = useState("");
-  const [bio, setBio] = useState("");
 
-  const [currentUserId, setCurrentUserId] = useState();
+
   const [currentUser, setCurrentUser] = useState();
   
   function toggleOverlay (visible, userForConvo){
     setShowOverlay(visible);
-    setUserForConvo(userForConvo);
+
   }
 
   
@@ -143,11 +115,10 @@ export default function ViewTask() {
       try {
         const task = await loadTask();
 
-        const { content, title, points, userName } = task;
+        const { content, title, userName } = task;
 
         setContent(content);
         setTitle(title);
-        setPoints(points);
         setUserId(userName);
         console.log(userName)
 
@@ -163,9 +134,9 @@ export default function ViewTask() {
         
         var i;
         for(i=0; i < 5; i++){
-          if(user[i].Name == "name")
+          if(user[i].Name === "name")
             setName(user[i].Value);
-          else if(user[i].Name == "custom:degree")
+          else if(user[i].Name === "custom:degree")
             setDegree(user[i].Value)
         }
 
@@ -205,10 +176,6 @@ export default function ViewTask() {
 
               <Typography variant="body1" color="textSecondary" component="p" className={classes.degree}>
                 {degree}
-              </Typography>
-
-              <Typography variant="h5" color="textSecondary" component="p" className={classes.bio}>
-                {bio}
               </Typography>
 
             </CardContent>
@@ -255,38 +222,3 @@ export default function ViewTask() {
     </div>
   );
 }
-
-const UsersWithData = compose(
-  graphql(listUsers, {
-    options: {
-      fetchPolicy: 'cache-and-network'
-    },
-    props: props => {
-      return {
-        users: props.data.listUsers ? props.data.listUsers.items : [],
-        subscribeToNewMessages: () => {
-          props.data.subscribeToMore({
-            document: OnCreateUser,
-            updateQuery: (prev, { subscriptionData: { data : { onCreateUser } } }) => {
-    
-              let userArray = prev.listUsers.items.filter(u => u.id !== onCreateUser.id)
-              userArray = [
-                ...userArray,
-                onCreateUser,
-              ]
-              console.log('userArray:' , userArray)
-
-              return {
-                ...prev,
-                listUsers: {
-                  ...prev.listUsers,
-                  items: userArray
-                }
-              }
-            }
-          })
-        },
-      }
-    }
-  })
-)(ViewTask)

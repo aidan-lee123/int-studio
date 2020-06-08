@@ -1,6 +1,5 @@
 import React from "react";
 import { Auth } from "aws-amplify";
-import { withAuthenticator } from "aws-amplify-react";
 
 export const withUser = WrappedComponent => {
   class HOC extends React.Component {

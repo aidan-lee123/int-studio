@@ -13,7 +13,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { CardActionArea } from "@material-ui/core";
-import Chip from '@material-ui/core/Chip';
+
 import Grid from '@material-ui/core/Grid';
 
 
@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
   },
   profile: {
     padding: theme.spacing(2),
-    height: '100%',
     maxWidth: 350,
     minWidth: 300,
     textAlign: 'center',
@@ -41,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
   card: {
     padding: theme.spacing(2),
     backgroundColor: '#7fc4fd',
-    height: '100%',
     maxWidth: 350,
     minWidth: 300,
     textAlign: 'center',
@@ -99,15 +97,11 @@ export default function ViewTask() {
     const { isAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(true);
     const [tasks, setTasks] = useState(null);
-    const [user, setUser] = useState(null);
-    const [content, setContent] = useState("");
-    const [title, setTitle] = useState("");
+
 
 
     const [name, setName] = useState("");
     const [degree, setDegree] = useState("");
-    const [bio, setBio] = useState("");
-    const [points, setPoints] = useState();
     
 
 useEffect(() => {
@@ -122,18 +116,13 @@ useEffect(() => {
         console.log("LOADED TASKS");
         console.log(user);
         setTasks(tasks);
-        setUser(user);
 
         var i;
-        for(i=0; i < 7; i++){
-          if(user[i].Name == "name")
+        for(i=0; i < 5; i++){
+          if(user[i].Name === "name")
             setName(user[i].Value);
-          else if(user[i].Name == "custom:degree")
+          else if(user[i].Name === "custom:degree")
             setDegree(user[i].Value)
-          else if(user[i].Name == "custom:bio")
-            setBio(user[i].Value);
-          else if(user[i].Name == "custom:points")
-            setPoints(user[i].Value);
         }
 
         } catch (e) {
@@ -206,10 +195,6 @@ useEffect(() => {
 
             <Typography variant="body1" color="textSecondary" component="p" className={classes.degree}>
               {degree}
-            </Typography>
-
-            <Typography variant="h5" color="textSecondary" component="p" className={classes.bio}>
-              {bio}
             </Typography>
 
           </CardContent>
