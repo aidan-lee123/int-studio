@@ -42,6 +42,8 @@ const CREATE_ROOM = gql`
 
 const CustomListItem = withStyles({
   root: {
+    borderBottom: '2px solid',
+    borderColor: 'white',
     '&:hover': {
       backgroundColor: '#0069d9',
       borderColor: '#0062cc',
@@ -129,7 +131,7 @@ export default () => {
     userIndex++;
 
     return(
-      <CustomListItem key={res[otherUserIndex]} style={{ textAlign: 'left'}} >
+      <CustomListItem key={res[otherUserIndex]} >
         <Button
         style={{ flex: 1, color:'white', fontWeight: '300', textAlign: 'left'}}
         component={Link}
