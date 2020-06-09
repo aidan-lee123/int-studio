@@ -18,6 +18,187 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid'
 import { CardActionArea } from "@material-ui/core";
 
+import Skeleton from '@material-ui/lab/Skeleton';
+
+export default function Profile() {
+  const classes = useStyles();
+  const [tasks, setTasks] = useState([]);
+  const { isAuthenticated } = useAppContext();
+  const [isLoading, setIsLoading] = useState(true);
+  const [userName, setUserName] = useState();
+  const [userDegree, setUserDegree] = useState();
+
+
+  useEffect(() => {
+    async function onLoad() {
+      if (!isAuthenticated) {
+        return;
+      }
+  
+      try {
+        getUserInfo();
+        const tasks = await loadTasks();
+        console.log("LOADED TASKS");
+        setTasks(tasks);
+      } catch (e) {
+        onError(e);
+      }
+  
+      setIsLoading(false);
+    }
+  
+    onLoad();
+  }, [isAuthenticated]);
+  
+  function loadTasks() {
+
+    return API.get("tasks", "/tasks");
+    
+    
+  }
+
+  //This is the current user name lol
+  async function getUserInfo() {
+    const currentUserInfo = await Auth.currentUserInfo()
+    const name = currentUserInfo.attributes['name'];
+    const degree = currentUserInfo.attributes['custom:degree'];
+    setUserName(name);
+    setUserDegree(degree);
+  }
+
+  function renderTasksList(tasks) {
+    return [{}].concat(tasks).map((task, i) =>
+      i !== 0 ? (
+
+          <Card className={classes.card}>
+
+              <CardContent>
+
+
+                <Typography gutterBottom variant="h4" component="h2">
+                  {task.title}
+                </Typography>
+
+                <Typography variant="body1" color="textSecondary" component="p">
+                  {"Created: " + new Date(task.createdAt).toLocaleString()} 
+                </Typography>
+
+                {/*<Chip className={classes.points} label={"Points: " + task.points} /> */}
+
+                <Link to={`/tasks/${task.taskId}/view`} className="btn btn-info btn-lg viewTask">
+                  <b>view task</b>
+                </Link>
+              </CardContent>
+
+            </Card>
+      ) : (
+        <LinkContainer key="new" to="/tasks/new" >
+
+            <Card className={classes.card}>
+              <CardActionArea>
+                <b>{"\uFF0B"}</b> Create a new task
+              </CardActionArea>
+            </Card>
+
+        </LinkContainer>
+      )
+    );
+  }
+
+  function renderLander() {
+    return (
+      <div className="lander">
+        <p> Please Sign In</p>
+      </div>
+    );
+  }
+  function renderSkeleton() {
+    return (  
+    <>
+    <Card className={classes.card}>
+      <CardContent>
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+  
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+  
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+
+      </CardContent>
+    </Card>
+    </>
+    )
+  }
+
+  function renderTasks() {
+    return (
+      <Grid container className={classes.root} spacing={2} justify="center" alignItems="center" >
+        <Grid item xs>
+          <Card className={classes.profile}>
+
+            {isLoading ? (
+              <Skeleton animation="wave" variant="circle" width={40} height={40} className={classes.avatar}/> 
+            ) : (
+              <Avatar alt={userName} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
+            )}
+            <CardContent>
+
+              {isLoading ? (
+              <React.Fragment className={classes.name}>
+                <Skeleton height={10} />
+                <Skeleton height={10} style={{ marginBottom: 30 }} />
+              </React.Fragment>
+              ) : (
+              <Typography gutterBottom variant="h4" component="h2" className={classes.name}>
+                {userName}
+              </Typography>
+              )}
+
+              {isLoading ? (
+              <React.Fragment className={classes.degree}>
+                <Skeleton height={10} />
+                <Skeleton height={10} style={{ marginBottom: 6 }} />
+              </React.Fragment>
+              ) : (
+              <Typography variant="body1" color="textSecondary" component="p" className={classes.degree}>
+                {userDegree}
+              </Typography>
+              )}
+
+            </CardContent>
+
+          </Card>
+        </Grid>
+        <Grid Item xs >
+          <Typography variant="h3" style={{color: "white", padding: 50}}
+          >Your Tasks
+          </Typography>
+          <Grid container className={classes.root} spacing={2}>
+          {isLoading ? renderSkeleton() :(!isLoading && renderTasksList(tasks))}
+          </Grid>
+        </Grid>
+      </Grid>
+
+    );
+  }
+
+  return (
+    <div className="Home">
+
+      {isAuthenticated ? renderTasks() : renderLander()}
+
+    </div>
+  );
+}
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -91,146 +272,3 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 'auto',
   },
 }));
-
-export default function Profile() {
-  const classes = useStyles();
-  const [tasks, setTasks] = useState([]);
-  const { isAuthenticated } = useAppContext();
-  const [isLoading, setIsLoading] = useState(true);
-  const [userName, setUserName] = useState();
-  const [userDegree, setUserDegree] = useState();
-  const [userBio, setUserBio] = useState();
-
-
-  useEffect(() => {
-    async function onLoad() {
-      if (!isAuthenticated) {
-        return;
-      }
-  
-      try {
-        getUserInfo();
-        const tasks = await loadTasks();
-        console.log("LOADED TASKS");
-        setTasks(tasks);
-      } catch (e) {
-        onError(e);
-      }
-  
-      setIsLoading(false);
-    }
-  
-    onLoad();
-  }, [isAuthenticated]);
-  
-  function loadTasks() {
-
-    return API.get("tasks", "/tasks");
-    
-    
-  }
-
-  //This is the current user name lol
-  async function getUserInfo() {
-    const currentUserInfo = await Auth.currentUserInfo()
-    const name = currentUserInfo.attributes['name'];
-    const degree = currentUserInfo.attributes['custom:degree'];
-    const bio = currentUserInfo.attributes['custom:bio'];
-    setUserName(name);
-    setUserDegree(degree);
-    setUserBio(bio);
-  }
-
-  function renderTasksList(tasks) {
-    return [{}].concat(tasks).map((task, i) =>
-      i !== 0 ? (
-
-          <Card className={classes.card}>
-
-              <CardContent>
-
-
-                <Typography gutterBottom variant="h4" component="h2">
-                  {task.title}
-                </Typography>
-
-                <Typography variant="body1" color="textSecondary" component="p">
-                  {"Created: " + new Date(task.createdAt).toLocaleString()} 
-                </Typography>
-
-                {/*<Chip className={classes.points} label={"Points: " + task.points} /> */}
-
-                <Link to={`/tasks/${task.taskId}/view`} className="btn btn-info btn-lg viewTask">
-                  <b>view task</b>
-                </Link>
-              </CardContent>
-
-            </Card>
-      ) : (
-        <LinkContainer key="new" to="/tasks/new" >
-
-            <Card className={classes.card}>
-              <CardActionArea>
-                <b>{"\uFF0B"}</b> Create a new task
-              </CardActionArea>
-            </Card>
-
-        </LinkContainer>
-      )
-    );
-  }
-
-  function renderLander() {
-    return (
-      <div className="lander">
-        <p> Please Sign In</p>
-      </div>
-    );
-  }
-
-  function renderTasks() {
-    return (
-      <Grid container className={classes.root} spacing={2} justify="center" alignItems="center" >
-        <Grid item xs>
-          <Card className={classes.profile}>
-
-            <Avatar alt={userName} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
-            <CardContent>
-
-              <Typography gutterBottom variant="h4" component="h2" className={classes.name}>
-                {userName}
-              </Typography>
-
-              <Typography variant="body1" color="textSecondary" component="p" className={classes.degree}>
-                {userDegree}
-              </Typography>
-
-              <Typography variant="h5" color="textSecondary" component="p" className={classes.bio}>
-                {userBio}
-              </Typography>
-
-            </CardContent>
-
-          </Card>
-        </Grid>
-        <Grid Item xs >
-          <Typography variant="h3" style={{color: "white", padding: 50}}
-          >Your Tasks
-          </Typography>
-          <Grid container className={classes.root} spacing={2}>
-            {!isLoading && renderTasksList(tasks)}
-          </Grid>
-        </Grid>
-      </Grid>
-
-    );
-  }
-
-  return (
-    <div className="Home">
-
-      {isAuthenticated ? renderTasks() : renderLander()}
-
-    </div>
-  );
-}

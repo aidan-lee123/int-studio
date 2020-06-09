@@ -14,6 +14,178 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid'
 import { CardActionArea } from "@material-ui/core";
+import Skeleton from '@material-ui/lab/Skeleton';
+
+export default function Home() {
+  const classes = useStyles();
+  const [tasks, setTasks] = useState([]);
+  const { isAuthenticated } = useAppContext();
+  const [isLoading, setIsLoading] = useState(true);
+
+
+  useEffect(() => {
+    async function onLoad() {
+      if (!isAuthenticated) {
+        return;
+      }
+  
+      try {
+        const tasks = await loadTasks();
+        console.log("LOADED TASKS");
+        setTasks(tasks);
+      } catch (e) {
+        onError(e);
+      }
+  
+      setIsLoading(false);
+    }
+  
+    onLoad();
+  }, [isAuthenticated]);
+  
+  function loadTasks() {
+    return API.get("tasks", "/tasks/all");
+  }
+
+  function renderTasksList(tasks) {
+    return [{}].concat(tasks).map((task, i) =>
+      i !== 0 ? (
+
+          <Card className={classes.card}>
+
+              <CardContent>
+                <Typography gutterBottom variant="h4" component="h2" className="title">
+                  <b>{task.title}</b>
+                </Typography>
+
+                <Typography gutterBottom variant="h5" component="h2">
+                  {task.content}
+                </Typography>
+
+                <Typography variant="body1" color="textSecondary" component="p">
+                  {"Created: " + new Date(task.createdAt).toLocaleString()} 
+                </Typography>
+
+                <Link to={`/tasks/${task.taskId}/view`} className={classes.viewButton}>
+                  <b>view task</b>
+                </Link>
+              </CardContent>
+
+
+            </Card>
+
+
+      ) : (
+        <LinkContainer key="new" to="/tasks/new">
+          <Card className={classes.card}>
+            <CardActionArea>
+            <h4>
+              <b>{"\uFF0B"}</b> Create a new task
+            </h4>
+            </CardActionArea>
+          </Card>
+        </LinkContainer>
+      )
+    );
+  }
+
+  function renderLogin() {
+    return (
+      <div className="lander">
+        <h1>Learn Together</h1>
+        <div>
+          <Link to="/login" className="btn btn-info btn-lg">
+            Login
+          </Link>
+          <Link to="/signup" className="btn btn-success btn-lg">
+            Signup
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  function renderSkeleton() {
+    return (  
+    <>
+    <Card className={classes.skeleton}>
+      <CardContent>
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+  
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+  
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+
+      </CardContent>
+    </Card>
+    <Card className={classes.skeleton}>
+      <CardContent>
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+  
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+  
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+
+      </CardContent>
+    </Card>
+    <Card className={classes.skeleton}>
+      <CardContent>
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+  
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+  
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+
+      </CardContent>
+    </Card>
+    </>
+    )
+  }
+
+  function renderTasks() {
+    return (
+      <div className="tasks" style={{width: '100%'}}>
+        <PageHeader style={{backgroundColor: "#04082E", borderColor: "#0b0c16", color: 'white', marginLeft: 'auto', marginRight: 'auto'}}>All Tasks</PageHeader>
+        <Grid container className={classes.root} spacing={2}>
+          {isLoading ? renderSkeleton() :(!isLoading && renderTasksList(tasks))}
+        </Grid>
+      </div>
+    );
+  }
+
+  return (
+    <div className="Home">
+      {isAuthenticated ? renderTasks() : renderLogin()}
+    </div>
+  );
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +198,20 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     margin: 10,
     minWidth: 300,
+    maxWidth: 350,
+    minHeight: 400,
+    textAlign: 'center',
+    marginLeft: '10',
+    marginRight: '10',
+    backgroundColor: '#7fc4fd',
+    borderRadius: '0',
+    position: 'relative',
+    
+  },
+  skeleton: {
+    padding: theme.spacing(2),
+    margin: 10,
+    minWidth: 360,
     maxWidth: 350,
     minHeight: 400,
     textAlign: 'center',
@@ -78,113 +264,3 @@ const useStyles = makeStyles((theme) => ({
   },
 
 }));
-
-export default function Home() {
-  const classes = useStyles();
-  const [tasks, setTasks] = useState([]);
-  const { isAuthenticated } = useAppContext();
-  const [isLoading, setIsLoading] = useState(true);
-
-
-  useEffect(() => {
-    async function onLoad() {
-      if (!isAuthenticated) {
-        return;
-      }
-  
-      try {
-        const tasks = await loadTasks();
-        console.log("LOADED TASKS");
-        setTasks(tasks);
-      } catch (e) {
-        onError(e);
-      }
-  
-      setIsLoading(false);
-    }
-  
-    onLoad();
-  }, [isAuthenticated]);
-  
-  function loadTasks() {
-    return API.get("tasks", "/tasks/all");
-  }
-
-  function renderTasksList(tasks) {
-    return [{}].concat(tasks).map((task, i) =>
-      i !== 0 ? (
-
-          <Card className={classes.card}>
-
-              <CardContent>
-                <Typography gutterBottom variant="h4" component="h2" className="title">
-                  <b>{task.title}</b>
-                </Typography>
-
-                <Typography gutterBottom variant="h5" component="h2">
-                  {task.content}
-                </Typography>
-
-                <Typography variant="body1" color="textSecondary" component="p">
-                  {"Created: " + new Date(task.createdAt).toLocaleString()} 
-                </Typography>
-
-                {/*<Chip className={classes.points} label={"Points: " + task.points} />*/}
-
-                <Link to={`/tasks/${task.taskId}/view`} className={classes.viewButton}>
-                  <b>view task</b>
-                </Link>
-              </CardContent>
-
-
-            </Card>
-
-
-      ) : (
-        <LinkContainer key="new" to="/tasks/new">
-          <Card className={classes.card}>
-            <CardActionArea>
-            <h4>
-              <b>{"\uFF0B"}</b> Create a new task
-            </h4>
-            </CardActionArea>
-          </Card>
-        </LinkContainer>
-      )
-    );
-  }
-
-  function renderLogin() {
-    return (
-      <div className="lander">
-        <h1>Learn Together</h1>
-        <div>
-          <Link to="/login" className="btn btn-info btn-lg">
-            Login
-          </Link>
-          <Link to="/signup" className="btn btn-success btn-lg">
-            Signup
-          </Link>
-        </div>
-      </div>
-    );
-  }
-  
-
-  function renderTasks() {
-    return (
-      <div className="tasks" style={{width: '100%'}}>
-        <PageHeader style={{backgroundColor: "#04082E", borderColor: "#0b0c16", color: 'white', marginLeft: 'auto', marginRight: 'auto'}}>All Tasks</PageHeader>
-        <Grid container className={classes.root} spacing={2}>
-          {!isLoading && renderTasksList(tasks)}
-        </Grid>
-      </div>
-    );
-  }
-
-  return (
-    <div className="Home">
-      {isAuthenticated ? renderTasks() : renderLogin()}
-    </div>
-  );
-}

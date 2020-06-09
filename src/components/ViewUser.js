@@ -16,80 +16,9 @@ import { CardActionArea } from "@material-ui/core";
 
 import Grid from '@material-ui/core/Grid';
 
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import "./ViewTask.css";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    minHeight: 500,
-    paddingTop: 200,
-  },
-  profile: {
-    padding: theme.spacing(2),
-    maxWidth: 350,
-    minWidth: 300,
-    textAlign: 'center',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    borderRadius: 0,
-    height: 400,
-    position: 'relative',
-    marginTop: 10,
-  },
-  card: {
-    padding: theme.spacing(2),
-    backgroundColor: '#7fc4fd',
-    maxWidth: 350,
-    minWidth: 300,
-    textAlign: 'center',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    borderRadius: 0,
-    height: 400,
-    position: 'relative',
-    marginTop: 10,
-  },
-  task: {
-    width: 800,
-    height: 400,
-  },
-  avatar: {
-    marginTop: 40,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-  name: {
-    marginTop: 10,
-  },
-  degree: {
-    marginTop: 10,
-  },
-  bio: {
-    marginTop: 30,
-  },
-  title: {
-
-    top: 10,
-    color: '#2699fb',
-  },
-  content: {
-    color: '#2699fb',
-
-    top: 100,
-  },
-  points: {
-    margin: '10px',
-    fontSize: 12,
-
-    bottom: 10,
-    left: '45%',
-  },
-  button: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-}));
 
 export default function ViewTask() {
     const classes = useStyles();
@@ -139,87 +68,210 @@ useEffect(() => {
       return API.get("tasks", `/tasks/${userId}/user/tasks`);
     }
 
-  function renderTasksList(tasks) {
-    return [{}].concat(tasks).map((task, i) =>
-      i !== 0 ? (
-
-          <Card className={classes.card}>
-
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
-
-              <CardContent>
-
-                <Typography gutterBottom variant="h4" component="h2">
-                  {task.title}
-                </Typography>
-
-                <Typography variant="body1" color="textSecondary" component="p">
-                  {"Created: " + new Date(task.createdAt).toLocaleString()} 
-                </Typography>
-
-                {/*<Chip className={classes.points} label={"Points: " + task.points} />*/}
-
-                <Link to={`/tasks/${task.taskId}/view`} className="btn btn-info btn-lg viewTask">
-                  <b>view task</b>
-                </Link>
-              </CardContent>
-
-            </Card>
-      ) : (
-        <LinkContainer key="new" to="/tasks/new" >
-
+    function renderTasksList(tasks) {
+      return [{}].concat(tasks).map((task, i) =>
+        i !== 0 ? (
+  
             <Card className={classes.card}>
-              <CardActionArea>
-                <b>{"\uFF0B"}</b> Create a new task
-              </CardActionArea>
-            </Card>
+  
+                <CardContent>
+  
+  
+                  <Typography gutterBottom variant="h4" component="h2">
+                    {task.title}
+                  </Typography>
+  
+                  <Typography variant="body1" color="textSecondary" component="p">
+                    {"Created: " + new Date(task.createdAt).toLocaleString()} 
+                  </Typography>
+  
+                  {/*<Chip className={classes.points} label={"Points: " + task.points} /> */}
+  
+                  <Link to={`/tasks/${task.taskId}/view`} className="btn btn-info btn-lg viewTask">
+                    <b>view task</b>
+                  </Link>
+                </CardContent>
+  
+              </Card>
+        ) : (
+          <LinkContainer key="new" to="/tasks/new" >
+  
+              <Card className={classes.card}>
+                <CardActionArea>
+                  <b>{"\uFF0B"}</b> Create a new task
+                </CardActionArea>
+              </Card>
+  
+          </LinkContainer>
+        )
+      );
+    }
 
-        </LinkContainer>
-      )
+  function renderLander() {
+    return (
+      <div className="lander">
+        <p> Please Sign In</p>
+      </div>
+    );
+  }
+
+  function renderSkeleton() {
+    return (  
+    <>
+    <Card className={classes.card}>
+      <CardContent>
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+  
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+  
+        <React.Fragment>
+              <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+              <Skeleton animation="wave" height={10} width="80%" />
+        </React.Fragment>
+
+      </CardContent>
+    </Card>
+    </>
+    )
+  }
+
+  function renderTasks() {
+    return (
+      <Grid container className={classes.root} spacing={2} justify="center" alignItems="center" >
+        <Grid item xs>
+          <Card className={classes.profile}>
+
+            {isLoading ? (
+              <Skeleton animation="wave" variant="circle" width={40} height={40} className={classes.avatar}/> 
+            ) : (
+              <Avatar alt={name} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
+            )}
+            <CardContent>
+
+              {isLoading ? (
+              <React.Fragment className={classes.name}>
+                <Skeleton height={10} />
+                <Skeleton height={10} style={{ marginBottom: 30 }} />
+              </React.Fragment>
+              ) : (
+              <Typography gutterBottom variant="h4" component="h2" className={classes.name}>
+                {name}
+              </Typography>
+              )}
+
+              {isLoading ? (
+              <React.Fragment className={classes.degree}>
+                <Skeleton height={10} />
+                <Skeleton height={10} style={{ marginBottom: 6 }} />
+              </React.Fragment>
+              ) : (
+              <Typography variant="body1" color="textSecondary" component="p" className={classes.degree}>
+                {degree}
+              </Typography>
+              )}
+
+            </CardContent>
+
+          </Card>
+        </Grid>
+        <Grid Item xs >
+          <Typography variant="h3" style={{color: "white", padding: 50}}
+          >Your Tasks
+          </Typography>
+          <Grid container className={classes.root} spacing={2}>
+          {isLoading ? renderSkeleton() :(!isLoading && renderTasksList(tasks))}
+          </Grid>
+        </Grid>
+      </Grid>
+
     );
   }
   
   return (
-    <div>
-      {tasks && (
-      <Grid container className={classes.root} spacing={2} justify="center" alignItems="center" >
-      <Grid item xs>
-        <Card className={classes.profile}>
+    <div className="Home">
 
-          <Avatar alt={name} src="/static/images/avatar/1.jpg" className={classes.avatar}/> 
-          <CardContent>
+    {isAuthenticated ? renderTasks() : renderLander()}
 
-            <Typography gutterBottom variant="h4" component="h2" className={classes.name}>
-              {name}
-            </Typography>
-
-            <Typography variant="body1" color="textSecondary" component="p" className={classes.degree}>
-              {degree}
-            </Typography>
-
-          </CardContent>
-
-          <CardActions>
-          <Button
-                  style={{ flex: 1 }}
-                  component={Link}
-                  to={`/tasks/${userId}/user`}
-                >
-                  Profile
-                </Button>
-          </CardActions>
-        </Card>
-      </Grid>
-
-        
-        <Grid item xs>
-          <Grid container className={classes.task} spacing={2}>
-            {!isLoading && renderTasksList(tasks)}
-          </Grid>
-        </Grid>
-
-      </Grid>
-      )}
-    </div>
+  </div>
   );
 }
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    minHeight: 500,
+
+  },
+  profile: {
+    padding: theme.spacing(2),
+
+    maxWidth: 350,
+    minWidth: 300,
+    textAlign: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    borderRadius: 0,
+    height: 400,
+    position: 'relative',
+    marginTop: 50,
+  },
+  card: {
+    padding: theme.spacing(2),
+    backgroundColor: '#7fc4fd',
+
+    maxWidth: 320,
+    minWidth: 250,
+    textAlign: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    borderRadius: 0,
+    height: 400,
+    position: 'relative',
+    marginTop: 10,
+  },
+  task: {
+    width: 800,
+    height: 400,
+  },
+  avatar: {
+    marginTop: 40,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  name: {
+    marginTop: 10,
+  },
+  degree: {
+    marginTop: 10,
+  },
+  bio: {
+    marginTop: 30,
+  },
+  title: {
+
+    top: 10,
+    color: '#2699fb',
+  },
+  content: {
+    color: '#2699fb',
+
+    top: 100,
+  },
+  points: {
+    margin: '10px',
+    fontSize: 12,
+
+    bottom: 10,
+    left: '45%',
+  },
+  button: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+}));

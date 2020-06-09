@@ -29,8 +29,7 @@ const LIST_ROOMS = gql`
 
 const CustomListItem = withStyles({
   root: {
-    borderBottom: '2px solid',
-    borderColor: 'white',
+    borderBottom: '2px solid white',
     '&:hover': {
       backgroundColor: '#0069d9',
       borderColor: '#0062cc',
