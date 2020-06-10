@@ -5,7 +5,7 @@ import "./Chat.css";
 import Drawer from '@material-ui/core/Drawer';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-import {FiHelpCircle} from 'react-icons/fi'
+import {AiOutlinePaperClip} from 'react-icons/ai'
 import {IoMdArrowRoundBack} from 'react-icons/io'
 import {GoFileMedia} from 'react-icons/go'
 import {GoDeviceCameraVideo} from 'react-icons/go'
@@ -186,7 +186,7 @@ export default function Chat(props) {
           id: user
         }}
       />
-      <FiHelpCircle 
+      <AiOutlinePaperClip 
         style={styles.help}
         onClick={toggleDrawer(true)}
       />
