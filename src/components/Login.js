@@ -40,7 +40,7 @@ export default function Login() {
     <div className="Login">
       <form onSubmit={handleSubmit}>
         <FormGroup controlId="email" bsSize="large">
-          <ControlLabel>Email</ControlLabel>
+          <ControlLabel style={{color: 'white'}}>Email</ControlLabel>
           <FormControl
             autoFocus
             type="email"
@@ -49,7 +49,7 @@ export default function Login() {
           />
         </FormGroup>
         <FormGroup controlId="password" bsSize="large">
-          <ControlLabel>Password</ControlLabel>
+          <ControlLabel style={{color: 'white'}}>Password</ControlLabel>
           <FormControl
             type="password"
             value={fields.password}

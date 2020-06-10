@@ -11,7 +11,14 @@ import {GoFileMedia} from 'react-icons/go'
 import {GoDeviceCameraVideo} from 'react-icons/go'
 import { Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid'
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import Skeleton from '@material-ui/lab/Skeleton';
+import Ass5 from "../images/Assignment5.png";
+import IconButton from '@material-ui/core/IconButton';
+import InfoIcon from '@material-ui/icons/Info';
 
 const customInputToolbar = props => {
   return (
@@ -124,10 +131,23 @@ export default function Chat(props) {
         alignItems="center"
         style={styles.grid}>
         <Grid item style={styles.gridItem}>
-            Grid 1
-        </Grid>
-        <Grid item style={styles.gridItem}>
-            Grid 2
+          <GridList cellHeight={300} className={styles.gridList}>
+            <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
+              <ListSubheader component="div" style={{fontSize: '12px'}}>Shared Media</ListSubheader>
+            </GridListTile>
+            <GridListTile key={Ass5}>
+            <img src={Ass5} alt={"Assignment 1"} />
+            <GridListTileBar
+              title={"Assignment 1"}
+              subtitle={<span>by: {"Nathan Palma"}</span>}
+              actionIcon={
+                <IconButton aria-label={`info about Assignment 1`} className={styles.icon}>
+                  <InfoIcon />
+                </IconButton>
+              }
+            />
+          </GridListTile>
+          </GridList>
         </Grid>
       </Grid>
     </div>
@@ -216,9 +236,10 @@ const styles = {
   gridItem: {
     minWidth: "100%",
     borderBottom: "2px solid #f0f0f0",
-    boxShadow: '0px 6px 3px -1px rgba(0,0,0,0.1)',
     marginBottom: 10,
     paddingTop: 50,
+    paddingLeft: 10,
+    paddingRight: 10,
     minHeight: "200px",
   },
   help: {
@@ -263,5 +284,12 @@ const styles = {
     textAlign: 'center',
     marginLeft: 50,
     width: '20%'
-  }
+  },
+  gridList: {
+    width: "100%",
+    height: 450,
+  },
+  icon: {
+    color: 'rgba(255, 255, 255, 0.54)',
+  },
 };

@@ -88,14 +88,14 @@ export default function Signup() {
     return (
       <form onSubmit={handleConfirmationSubmit}>
         <FormGroup controlId="confirmationCode" bsSize="large">
-          <ControlLabel>Confirmation Code</ControlLabel>
+          <ControlLabel style={{color: 'white'}}>Confirmation Code</ControlLabel>
           <FormControl
             autoFocus
             type="tel"
             onChange={handleFieldChange}
             value={fields.confirmationCode}
           />
-          <HelpBlock>Please check your email for the code.</HelpBlock>
+          <HelpBlock style={{color: 'white'}}>Please check your email for the code.</HelpBlock>
         </FormGroup>
         <LoaderButton
           block
@@ -114,7 +114,7 @@ export default function Signup() {
     return (
       <form onSubmit={handleSubmit}>
         <FormGroup controlId="email" bsSize="large">
-          <ControlLabel>Email</ControlLabel>
+          <ControlLabel style={{color: 'white'}}>Email</ControlLabel>
           <FormControl
             autoFocus
             type="email"
@@ -123,7 +123,7 @@ export default function Signup() {
           />
 
         <FormGroup controlId="name" bsSize="large">
-          <ControlLabel>Full Name</ControlLabel>
+          <ControlLabel style={{color: 'white'}}>Full Name</ControlLabel>
           <FormControl
             autoFocus
             type="text"
@@ -133,7 +133,7 @@ export default function Signup() {
         </FormGroup>
 
         <FormGroup controlId="degree" bsSize="large">
-          <ControlLabel>Degree</ControlLabel>
+          <ControlLabel style={{color: 'white'}}>Degree</ControlLabel>
           <FormControl
             autoFocus
             type="text"
@@ -144,7 +144,7 @@ export default function Signup() {
 
         </FormGroup>
         <FormGroup controlId="password" bsSize="large">
-          <ControlLabel>Password</ControlLabel>
+          <ControlLabel style={{color: 'white'}}>Password</ControlLabel>
           <FormControl
             type="password"
             value={fields.password}
@@ -152,7 +152,7 @@ export default function Signup() {
           />
         </FormGroup>
         <FormGroup controlId="confirmPassword" bsSize="large">
-          <ControlLabel>Confirm Password</ControlLabel>
+          <ControlLabel style={{color: 'white'}}>Confirm Password</ControlLabel>
           <FormControl
             type="password"
             onChange={handleFieldChange}
