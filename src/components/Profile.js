@@ -73,8 +73,6 @@ export default function Profile() {
           <Card className={classes.card}>
 
               <CardContent>
-
-
                 <Typography gutterBottom variant="h4" component="h2">
                   {task.title}
                 </Typography>

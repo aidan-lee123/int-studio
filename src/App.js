@@ -8,6 +8,13 @@ import { LinkContainer } from "react-router-bootstrap";
 import Routes from "./Routes";
 import { onError } from "./libs/errorLib";
 
+import Badge from '@material-ui/core/Badge';
+import { withStyles } from '@material-ui/core/styles';
+
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+  },
+}))(Badge);
 
 function App() {
   const history = useHistory();
